@@ -1,6 +1,6 @@
 #  Sentiment Analysis on Stack Overflow using BERT & RoBERTa
 
-> **Bachelor's Thesis** — Ionian University, Department of Informatics  
+> **Thesis** — Ionian University, Department of Informatics  
 > **Author:** Stergios Moutzikos  
 > **Supervisor:** Prof. Andreas Kanavos  
 > **Date:** February 2026
