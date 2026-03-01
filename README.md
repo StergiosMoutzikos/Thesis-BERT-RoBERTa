@@ -32,7 +32,7 @@ The evaluation framework includes agreement rates, Cohen's Kappa, McNemar's test
 │   ├── Code.ipynb                    # Main analysis notebook
 │   └── kaggle-dataset-query.ipynb    # Extraction code 
 ├── Thesis/
-│   ├── Thesis_Moutzikos.pdf    # Full thesis document (Greek + English abstract)│  
+│   ├── Thesis_Moutzikos.pdf    # Full thesis document (Greek + English abstract)
 │   └── thesis.tex              # Thesis in tex format
 ├── requirements.txt        # Python dependencies
 └── README.md
