@@ -41,7 +41,7 @@ The evaluation framework includes agreement rates, Cohen's Kappa, McNemar's test
 
 ##  Dataset
 
-Data was extracted from the **Stack Overflow BigQuery Public Dataset**(https://www.kaggle.com/datasets/stackoverflow/stackoverflow) via Google BigQuery. A 5% random sample was applied with a cap of 110,000 comments.
+Data was extracted from the [**Stack Overflow BigQuery Public Dataset**](https://www.kaggle.com/datasets/stackoverflow/stackoverflow) via Google BigQuery. A 5% random sample was applied with a cap of 110,000 comments.
 
 | Table | Records | Fields |
 |-------|---------|--------|
