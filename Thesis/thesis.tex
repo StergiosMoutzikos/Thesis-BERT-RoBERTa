@@ -1,0 +1,3154 @@
+\documentclass[a4paper,11pt,oneside,openany]{ioniothesis}
+
+\usepackage{biblatex} %Imports biblatex package
+\addbibresource{references.bib} %Import the bibliography file
+
+
+\usepackage[dvips]{graphicx}
+\usepackage{makeidx}
+\usepackage{booktabs,calc,multirow}
+\usepackage{alphabeta}
+\usepackage[greek,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{ioniostyle}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{caption}
+
+% Hyperref setup for clickable links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdftitle={Ανάλυση Συναισθημάτων Stack Overflow},
+    pdfauthor={Στέργιος Μουτζίκος},
+}
+
+\lstset{language=python,
+	frame=tb,
+	keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
+	identifierstyle=\ttfamily,
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.8,0,0},
+	showstringspaces=false,
+	basicstyle=\small,
+	numberstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=4,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	breakatwhitespace=false,
+	aboveskip={0.5\baselineskip},
+  columns=fixed,
+  upquote=true,
+  extendedchars=true,
+}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{orange},
+  showstringspaces=false,
+}
+
+\def\tl{\textlatin}
+\def\tg{\textgreek}
+
+\parindent=0pt
+
+\makeindex
+\evensidemargin=0 cm
+\oddsidemargin=1 cm
+\textwidth=15 cm
+
+
+%The following line is for one and half spacing
+%\linespread{1.3}
+%The following line is for double spacing
+%\linespread{1.6}
+\linespread{1.3}
+
+\usepackage{drop}
+
+
+
+\begin{document}
+
+
+
+
+\title{
+\textbf{\LARGE{\textsc{ΙΟΝΙΟ ΠΑΝΕΠΙΣΤΗΜΙΟ}} 
+\bigskip \\
+\large{\textsc{Τμήμα Πληροφορικής}}
+\bigskip \\ 
+\bigskip \\ 
+\includegraphics[width=0.7\textwidth]{./pdffigs/ionian-university.jpg}
+\bigskip \\ 
+\bigskip \\
+\Large{\textbf{Εξόρυξη και Ανάλυση Συναισθημάτων με Χρήση BERT και RoBERTa σε Κείμενα από Διαδικτυακές Πλατφόρμες}} 
+}}
+
+\author{
+\textbf{Στέργιος Μουτζίκος} \\ 
+\vspace{0.5cm}
+\textbf{Επιβλέπων Καθηγητής:} κ. Ανδρέας Καναβός \\
+}
+
+\date{\textbf{Φεβρουάριος 2026}}
+
+\maketitle 
+
+\newpage
+\newpage
+
+
+
+
+\newpage
+
+
+% ABSTRACT
+
+\section*{Abstract}
+% \addcontentsline{toc}{section}{Abstract}
+
+This thesis addresses the extraction and analysis of sentiment from online platform texts using modern Natural Language Processing (NLP) techniques. Specifically, two pre-trained models based on the Transformer architecture are utilized: BERT (Bidirectional Encoder Representations from Transformers) and RoBERTa (Robustly Optimized BERT Pretraining Approach), which have been fine-tuned on the GoEmotions dataset for the classification of 28 distinct emotions, and were applied to data from the Stack Overflow platform.
+
+The methodology includes data collection and preprocessing, application of both models for emotion recognition, and their comparative evaluation through statistical methods. The evaluation methods include agreement rates, Cohen's Kappa, McNemar's test, Pearson correlation analysis, and independent samples t-test.
+
+The results demonstrate that both models exhibit high agreement at the broader sentiment category level, while they differ in the fine-grained classification of individual emotions. BERT displays higher confidence scores, suggesting potential overconfidence, whereas RoBERTa demonstrates better calibration. Furthermore, a correlation was identified between the recognized emotions and user engagement metrics.
+
+This work contributes to the field by providing a systematic comparison of two leading sentiment analysis models and proposes directions for future research, including the use of newer models, multilingual expansion, and improvement of interpretability.
+
+\vspace{0.8cm}
+\noindent\textbf{Keywords:} Sentiment Analysis, BERT, RoBERTa, Natural Language Processing, Transformer, GoEmotions, Machine Learning, Text Mining
+
+\newpage
+
+
+% ΠΕΡΙΛΗΨΗ (Ελληνικά)
+\section*{Περίληψη}
+% \addcontentsline{toc}{section}{Περίληψη}
+
+Η παρούσα πτυχιακή εργασία πραγματεύεται την εξόρυξη και ανάλυση συναισθήματος από κείμενα διαδικτυακών πλατφορμών με χρήση σύγχρονων τεχνικών Επεξεργασίας Φυσικής Γλώσσας (NLP). Συγκεκριμένα, αξιοποιούνται δύο προ-εκπαιδευμένα μοντέλα βασισμένα στην αρχιτεκτονική Transformer: το BERT (Bidirectional Encoder Representations from Transformers) και το RoBERTa (Robustly Optimized BERT Pretraining Approach), τα οποία έχουν λεπτο-ρυθμιστεί στο σύνολο δεδομένων GoEmotions για την ταξινόμηση 28 διακριτών συναισθημάτων, και εφαρμόστηκαν σε δεδομένα από την πλατφόρμα Stack Overflow.
+
+Η μεθοδολογία περιλαμβάνει τη συλλογή και προ-επεξεργασία δεδομένων, την εφαρμογή των δύο μοντέλων για την αναγνώριση συναισθημάτων, και τη συγκριτική αξιολόγησή τους μέσω στατιστικών μεθόδων. Οι μέθοδοι αξιολόγησης περιλαμβάνουν ποσοστά συμφωνίας, Cohen's Kappa, έλεγχο McNemar, ανάλυση συσχέτισης Pearson και independent samples t-test.
+
+Τα αποτελέσματα καταδεικνύουν ότι τα δύο μοντέλα παρουσιάζουν υψηλή συμφωνία σε επίπεδο ευρύτερης συναισθηματικής κατηγορίας (sentiment), ενώ διαφέρουν στη λεπτομερή ταξινόμηση μεμονωμένων συναισθημάτων. Το BERT εμφανίζει υψηλότερα confidence scores, υποδηλώνοντας πιθανή υπερβολική εμπιστοσύνη, ενώ το RoBERTa παρουσιάζει καλύτερη βαθμονόμηση. Επιπλέον, διαπιστώθηκε συσχέτιση μεταξύ των αναγνωρισμένων συναισθημάτων και των μετρικών αλληλεπίδρασης των χρηστών (engagement metrics).
+
+Η εργασία συνεισφέρει στον τομέα παρέχοντας μια συστηματική σύγκριση δύο κορυφαίων μοντέλων ανάλυσης συναισθήματος και προτείνει κατευθύνσεις για μελλοντική έρευνα, συμπεριλαμβανομένης της χρήσης νεότερων μοντέλων, της πολυγλωσσικής επέκτασης, και της βελτίωσης της ερμηνευσιμότητας.
+
+\vspace{0.8cm}
+\noindent\textbf{Λέξεις-κλειδιά:} Ανάλυση Συναισθήματος, BERT, RoBERTa, Επεξεργασία Φυσικής Γλώσσας, Transformer, GoEmotions, Μηχανική Μάθηση, Εξόρυξη Κειμένου
+
+\newpage
+
+\section*{Ευχαριστίες}
+
+
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}
+\end{center}
+
+\begin{quotation}
+\itshape
+
+Με την ολοκλήρωση της πτυχιακής μου εργασίας, θα ήθελα να εκφράσω τις θερμές μου ευχαριστίες σε όλους όσους συνέβαλαν με οποιονδήποτε τρόπο στην ολοκλήρωσή της.
+
+\medskip
+
+Αρχικά, θα ήθελα να ευχαριστήσω τον επιβλέποντα καθηγητή μου, κ. Ανδρέα Καναβό, για την καθοδήγηση και την εμπιστοσύνη που μου έδειξε καθ' όλη τη διάρκεια της ερευνητικής μου προσπάθειας.
+
+\medskip
+
+Ευχαριστώ τους φίλους μου και συμφοιτητές μου για τις αμέτρητες στιγμές ανταλλαγής ιδεών καθ' όλη τη διάρκεια των σπουδών. Η παρουσία τους έκανε αυτή τη διαδρομή πιο όμορφη και ουσιαστική.
+
+\medskip
+
+Επίσης, ένα μεγάλο ευχαριστώ οφείλω στην οικογένειά μου, και ειδικά στους γονείς μου και στην αδελφή μου, για την αμέριστη υποστήριξη και ακούραστη υπομονή τους καθ' όλη τη διάρκεια των σπουδών μου.
+
+\medskip
+
+Τέλος, θα ήθελα να ευχαριστήσω και να συγχαρώ όλους τους φοιτητές και ανθρώπους που αγωνίζονται καθημερινά για ένα καλύτερο αύριο.
+
+\end{quotation}
+
+\begin{flushright}
+\textit{Στέργιος Μουτζίκος}\\
+\textit{Κέρκυρα, Φεβρουάριος 2026}
+\end{flushright}
+
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}
+\end{center}
+
+
+
+
+
+\tableofcontents
+
+\newpage
+
+% ============================================================
+% ΕΝΟΤΗΤΑ 2: ΕΙΣΑΓΩΓΗ
+% ============================================================
+\section{Εισαγωγή}
+\label{sec:Εισαγωγή}
+
+\subsection{Εισαγωγή στον Ερευνητικό Χώρο της Εργασίας}
+\label{sec:Εισαγωγή στον Ερευνητικό Χώρο της Εργασίας}
+
+Η ραγδαία ανάπτυξη του διαδικτύου και η εκρηκτική αύξηση των διαδικτυακών πλατφορμών κοινωνικής δικτύωσης και ανταλλαγής γνώσεων έχουν δημιουργήσει έναν τεράστιο όγκο δεδομένων κειμένου που παράγεται καθημερινά από εκατομμύρια χρήστες παγκοσμίως. Οι πλατφόρμες αυτές, όπως το Stack Overflow, το Twitter, το Reddit και άλλες, αποτελούν πλέον αναπόσπαστο κομμάτι της ψηφιακής επικοινωνίας, παρέχοντας στους χρήστες τη δυνατότητα να εκφράζουν απόψεις, συναισθήματα και να ανταλλάσσουν πληροφορίες σε πραγματικό χρόνο.
+
+Η ανάλυση συναισθήματος (Sentiment Analysis) αποτελεί έναν από τους πιο δυναμικά αναπτυσσόμενους κλάδους της Επεξεργασίας Φυσικής Γλώσσας (Natural Language Processing - NLP) και της Τεχνητής Νοημοσύνης. Στόχος της είναι η αυτόματη αναγνώριση, εξαγωγή και ταξινόμηση των συναισθημάτων και των απόψεων που εκφράζονται μέσα σε κείμενα. Η σημασία της ανάλυσης συναισθήματος εκτείνεται σε πολλαπλές τομείς, συμπεριλαμβανομένης της παρακολούθησης της φήμης επιχειρήσεων, της ανάλυσης της κοινής γνώμης, της πρόβλεψης τάσεων της αγοράς, καθώς και της κατανόησης της συμπεριφοράς των χρηστών σε διαδικτυακές κοινότητες.
+
+Η παρούσα πτυχιακή εργασία επικεντρώνεται στην εξόρυξη και ανάλυση συναισθήματος σε κείμενα που προέρχονται από διαδικτυακές πλατφόρμες, με τη χρήση σύγχρονων μοντέλων βαθιάς μάθησης βασισμένων στην αρχιτεκτονική Transformer. Συγκεκριμένα, πραγματοποιείται συγκριτική αξιολόγηση δύο κορυφαίων προεκπαιδευμένων μοντέλων: του BERT (Bidirectional Encoder Representations from Transformers) και του RoBERTa (Robustly Optimized BERT Pretraining Approach), τα οποία έχουν επιδείξει εξαιρετικές επιδόσεις σε ποικίλες εργασίες επεξεργασίας φυσικής γλώσσας.
+
+\subsection{Βασικές Προσεγγίσεις Επίλυσης}
+\label{sec:Βασικές Προσεγγίσεις Επίλυσής}
+
+Οι παραδοσιακές προσεγγίσεις στην ανάλυση συναισθήματος περιλαμβάνουν:
+
+\begin{itemize}
+    \item \textbf{Μέθοδοι βασισμένες σε λεξικά (Lexicon-based methods):} Χρησιμοποιούν προκαθορισμένα λεξικά συναισθημάτων όπου κάθε λέξη συσχετίζεται με μια συναισθηματική τιμή. Παραδείγματα αποτελούν τα VADER, SentiWordNet και AFINN.
+    
+    \item \textbf{Μέθοδοι μηχανικής μάθησης (Machine Learning methods):} Περιλαμβάνουν αλγορίθμους όπως Naive Bayes, Support Vector Machines (SVM) και Random Forests, οι οποίοι εκπαιδεύονται σε επισημασμένα δεδομένα με χειροκίνητα εξαγόμενα χαρακτηριστικά.
+    
+    \item \textbf{Αναπαραστάσεις λέξεων (Word Embeddings):} Τεχνικές όπως Word2Vec και GloVe που αναπαριστούν λέξεις ως πυκνά διανύσματα σε έναν συνεχή διανυσματικό χώρο, αποτυπώνοντας σημασιολογικές σχέσεις.
+    
+    \item \textbf{Μοντέλα Transformer:} Η πλέον σύγχρονη προσέγγιση που βασίζεται στον μηχανισμό attention, με κορυφαίους εκπροσώπους τα μοντέλα BERT, RoBERTa, GPT και τις παραλλαγές τους.
+\end{itemize}
+
+Στην παρούσα εργασία υιοθετείται η προσέγγιση της μεταφοράς μάθησης (transfer learning) με χρήση προεκπαιδευμένων μοντέλων Transformer. Συγκεκριμένα:
+
+\begin{enumerate}
+    \item Χρησιμοποιούνται τα μοντέλα BERT και RoBERTa που έχουν λεπτορυθμιστεί 
+(fine-tuned) στο dataset GoEmotions για ταξινόμηση 28 συναισθημάτων, 
+και εφαρμόζονται σε δεδομένα από το Stack Overflow.
+    
+    \item Τα συναισθήματα αντιστοιχίζονται σε τρεις ευρύτερες κατηγορίες (θετικό, αρνητικό, ουδέτερο) για συγκριτική ανάλυση.
+    
+    \item Εφαρμόζονται στατιστικοί έλεγχοι για την αξιολόγηση της συμφωνίας μεταξύ των μοντέλων και τη σύγκριση των επιδόσεων τους.
+\end{enumerate}
+
+\subsection{Ερευνητικά Ερωτήματα}
+\label{sec:Ερευνητικά Ερωτήματα}
+
+Η παρούσα εργασία επιδιώκει να απαντήσει στα ακόλουθα ερευνητικά ερωτήματα:
+
+\begin{enumerate}
+    \item \textbf{ΕΕ1:} Σε ποιο βαθμό συμφωνούν τα μοντέλα BERT και RoBERTa στην ανάλυση συναισθήματος;
+    
+    \item \textbf{ΕΕ2:} Ποιες είναι οι διαφορές στη βαθμονόμηση (calibration) μεταξύ των δύο μοντέλων;
+    
+    \item \textbf{ΕΕ3:} Ποια είναι τα κυρίαρχα συναισθήματα στην τεχνική κοινότητα του Stack Overflow;
+    
+    \item \textbf{ΕΕ4:} Υπάρχει συσχέτιση μεταξύ συναισθήματος και δημοτικότητας σχολίων;
+    
+    \item \textbf{ΕΕ5:} Σε ποια συναισθήματα παρατηρούνται οι περισσότερες διαφωνίες μεταξύ των μοντέλων;
+\end{enumerate}
+
+\subsection{Συνεισφορά της Εργασίας}
+\label{sec:Συνεισφορά της Εργασίας}
+
+Η παρούσα πτυχιακή εργασία συνεισφέρει στον ερευνητικό χώρο της ανάλυσης συναισθήματος μέσω των ακόλουθων:
+
+\begin{enumerate}
+    \item \textbf{Συγκριτική Ανάλυση Μοντέλων:} Παρέχεται μια εκτενής συγκριτική αξιολόγηση των μοντέλων BERT και RoBERTa στην ανίχνευση συναισθημάτων, εξετάζοντας διαστάσεις όπως η ακρίβεια ταξινόμησης, η βαθμονόμηση των βαθμών εμπιστοσύνης και η συμφωνία μεταξύ των μοντέλων.
+    
+    \item \textbf{Στατιστική Επικύρωση:} Εφαρμόζονται αυστηροί στατιστικοί έλεγχοι (Cohen's Kappa, McNemar's Test, Pearson Correlation, T-test) για την τεκμηρίωση των ευρημάτων και τη διασφάλιση της εγκυρότητας των συμπερασμάτων.
+    
+    \item \textbf{Ανάλυση Πραγματικών Δεδομένων:} Η εργασία βασίζεται σε πραγματικά δεδομένα από την πλατφόρμα Stack Overflow, προσφέροντας γνώσεις για τη συναισθηματική δυναμική τεχνικών κοινοτήτων.
+    
+    \item \textbf{Πολυδιάστατη Ανάλυση:} Διερευνάται η σχέση μεταξύ των ανιχνευόμενων συναισθημάτων και μετρικών αλληλεπίδρασης χρηστών (βαθμολογίες, upvotes, downvotes), καθώς και γεωγραφικών παραγόντων.
+    
+    \item \textbf{Αναπαραγώγιμη Μεθοδολογία:} Παρέχεται πλήρης τεκμηρίωση της μεθοδολογίας και του κώδικα, επιτρέποντας την αναπαραγωγή των αποτελεσμάτων και την επέκταση της έρευνας.
+\end{enumerate}
+
+
+
+% ============================================================
+% ΕΝΟΤΗΤΑ 3: ΕΡΕΥΝΗΤΙΚΟΣ ΧΩΡΟΣ (ΜΕ ΒΙΒΛΙΟΓΡΑΦΙΚΗ ΕΠΙΣΚΟΠΗΣΗ)
+% ============================================================
+\section{Ερευνητικός Χώρος (με Βιβλιογραφική Επισκόπηση)}
+\label{sec:Ερευνητικός χώρος (με βιβλιογραφική επισκόπηση)}
+
+Το παρόν κεφάλαιο παρουσιάζει μια εκτενή βιβλιογραφική επισκόπηση του ερευνητικού χώρου της ανάλυσης συναισθήματος και της επεξεργασίας φυσικής γλώσσας. Η επισκόπηση καλύπτει την ιστορική εξέλιξη του πεδίου, τις παραδοσιακές και σύγχρονες μεθοδολογίες, καθώς και τις πρόσφατες εξελίξεις στα μοντέλα βαθιάς μάθησης με έμφαση στην αρχιτεκτονική Transformer και τα μοντέλα BERT και RoBERTa.
+
+\subsection{Βιβλιογραφική Επισκόπηση}
+\label{sec:Βιβλιογραφική Επισκόπηση}
+
+\subsubsection{Αρχικές Προσεγγίσεις}
+\label{sec:Αρχικές Προσεγγίσεις}
+
+Η ανάλυση συναισθήματος ως ερευνητικό πεδίο άρχισε να αναπτύσσεται συστηματικά στις αρχές της δεκαετίας του 2000. Οι \cite{pang2002thumbs} πραγματοποίησαν μία από τις πρώτες συστηματικές μελέτες, εφαρμόζοντας τεχνικές μηχανικής μάθησης για την ταξινόμηση κριτικών ταινιών ως θετικές ή αρνητικές. Η εργασία τους έδειξε ότι απλοί αλγόριθμοι όπως ο Naive Bayes και τα Support Vector Machines μπορούσαν να επιτύχουν ακρίβεια περίπου 82\% στην ταξινόμηση συναισθήματος.
+
+Οι \cite{turney2002thumbs} πρότειναν μια μη επιβλεπόμενη μέθοδο βασισμένη στον σημασιολογικό προσανατολισμό φράσεων, χρησιμοποιώντας το Pointwise Mutual Information (PMI) για τον υπολογισμό της συναισθηματικής πολικότητας. Η προσέγγισή τους επέτρεψε την ανάλυση συναισθήματος χωρίς την ανάγκη επισημασμένων δεδομένων εκπαίδευσης.
+
+Ο \cite{liu2012sentiment} παρουσίασε μια ολοκληρωμένη επισκόπηση του πεδίου, ορίζοντας τα θεμελιώδη προβλήματα και τις προκλήσεις της ανάλυσης συναισθήματος. Η εργασία του αποτέλεσε σημείο αναφοράς για τους ερευνητές, καθιερώνοντας την ορολογία και τα πλαίσια αξιολόγησης που χρησιμοποιούνται μέχρι σήμερα.
+
+Η ανάπτυξη λεξικών συναισθημάτων αποτέλεσε θεμελιώδη συνεισφορά στον τομέα. Οι \cite{hu2004mining} δημιούργησαν ένα από τα πρώτα εκτενή λεξικά γνώμης, εντοπίζοντας λέξεις που εκφράζουν θετική ή αρνητική στάση. Το SentiWordNet, που αναπτύχθηκε από τους \cite{baccianella2010sentiwordnet}, επέκτεινε το WordNet με βαθμολογίες συναισθήματος για κάθε synset, παρέχοντας ένα πλούσιο λεξικογραφικό πόρο.
+
+Το VADER (Valence Aware Dictionary and sEntiment Reasoner), που παρουσιάστηκε από τους \cite{hutto2014vader}, σχεδιάστηκε ειδικά για την ανάλυση κειμένων κοινωνικών μέσων. Το VADER λαμβάνει υπόψη τόσο τη λεξιλογική σημασία όσο και κανόνες γραμματικής και σύνταξης, επιτυγχάνοντας εξαιρετικές επιδόσεις σε ανεπίσημα κείμενα.
+
+\subsubsection{Προσεγγίσεις Μηχανικής Μάθησης}
+\label{sec:Προσεγγίσεις Μηχανικής Μάθησης}
+
+Οι παραδοσιακές μέθοδοι μηχανικής μάθησης κυριάρχησαν στον τομέα της ανάλυσης συναισθήματος για περισσότερο από μια δεκαετία. Οι \cite{pang2008opinion} παρουσίασαν μια εκτενή επισκόπηση των μεθόδων εξόρυξης γνώμης, συγκρίνοντας διάφορους αλγορίθμους ταξινόμησης συμπεριλαμβανομένων των Naive Bayes, Maximum Entropy και Support Vector Machines.
+
+Οι \cite{go2009twitter} εφάρμοσαν τεχνικές μηχανικής μάθησης για την ανάλυση συναισθήματος σε tweets, χρησιμοποιώντας emoticons ως θορυβώδεις ετικέτες για τη δημιουργία συνόλου εκπαίδευσης. Η μεθοδολογία τους, γνωστή ως "distant supervision", έδειξε ότι μπορούν να επιτευχθούν ικανοποιητικές επιδόσεις χωρίς χειροκίνητη επισήμανση δεδομένων.
+
+Η εισαγωγή των word embeddings σηματοδότησε μια σημαντική μετάβαση στην αναπαράσταση κειμένου. Οι \cite{mikolov2013distributed} παρουσίασαν το Word2Vec, μια μέθοδο που μαθαίνει πυκνές διανυσματικές αναπαραστάσεις λέξεων από μεγάλα σώματα κειμένου. Οι \cite{pennington2014glove} ανέπτυξαν το GloVe (Global Vectors for Word Representation), μια μέθοδο που συνδυάζει τα πλεονεκτήματα των μεθόδων παγκόσμιας στατιστικής πίνακα και τοπικών μεθόδων context window.
+
+\subsubsection{Deep Learning και Transformers}
+\label{sec:Deep learning και Transformers}
+
+Τα Επαναληπτικά Νευρωνικά Δίκτυα (RNNs) αποτέλεσαν τις πρώτες αρχιτεκτονικές βαθιάς μάθησης που εφαρμόστηκαν επιτυχώς σε προβλήματα επεξεργασίας ακολουθιών. Οι \cite{socher2013recursive} πρότειναν τα Recursive Neural Tensor Networks για την ανάλυση συναισθήματος σε επίπεδο πρότασης. Τα δίκτυα Long Short-Term Memory (LSTM), που παρουσιάστηκαν αρχικά από τους \cite{hochreiter1997long}, αντιμετώπισαν το πρόβλημα του vanishing gradient.
+
+Οι \cite{kim2014convolutional} εφάρμοσαν Συνελικτικά Νευρωνικά Δίκτυα στην ταξινόμηση κειμένου, χρησιμοποιώντας πολλαπλά φίλτρα διαφορετικών μεγεθών για την εξαγωγή n-gram χαρακτηριστικών.
+
+Η αρχιτεκτονική Transformer, που παρουσιάστηκε από τους \cite{vaswani2017attention}, επέφερε επανάσταση στην επεξεργασία φυσικής γλώσσας. Η βασική καινοτομία είναι ο μηχανισμός self-attention, ο οποίος επιτρέπει σε κάθε θέση της εισόδου να "προσέχει" όλες τις άλλες θέσεις.
+
+Το BERT (Bidirectional Encoder Representations from Transformers), που παρουσιάστηκε από τους \cite{devlin2018bert}, αποτελεί ορόσημο στην ιστορία της NLP. Η βασική καινοτομία του BERT είναι η αμφίδρομη προεκπαίδευση, η οποία επιτρέπει στο μοντέλο να λαμβάνει υπόψη τόσο το αριστερό όσο και το δεξιό context κάθε token ταυτόχρονα.
+
+
+
+
+\subsubsection{Ανάλυση Συναισθημάτων στον Κοινωνικό Ιστό}
+\label{sec:Ανάλυση Συναισθημάτων στον Κοινωνικό Ιστό}
+
+Οι \cite{rosenthal2017semeval} οργάνωσαν τον διαγωνισμό SemEval-2017 Task 4 για ανάλυση συναισθήματος σε Twitter, ο οποίος αποτέλεσε σημείο αναφοράς για την αξιολόγηση συστημάτων ανάλυσης συναισθήματος σε κοινωνικά μέσα.
+
+Οι \cite{barbieri2020tweeteval} δημιούργησαν το TweetEval, ένα ενοποιημένο benchmark για αξιολόγηση μοντέλων NLP σε tweets, συμπεριλαμβάνοντας εργασίες ανάλυσης συναισθήματος, αναγνώρισης συναισθημάτων και ανίχνευσης hate speech.
+
+Οι \cite{nguyen2020bertweet} ανέπτυξαν το BERTweet, ένα μοντέλο BERT προεκπαιδευμένο αποκλειστικά σε tweets, το οποίο επιτυγχάνει καλύτερες επιδόσεις σε εργασίες σχετικές με Twitter.
+
+Η ανάλυση συναισθήματος σε τεχνικές κοινότητες όπως το Stack Overflow παρουσιάζει ιδιαίτερες προκλήσεις. Οι \cite{novielli2018benchmark} δημιούργησαν ένα benchmark dataset για ανάλυση συναισθήματος σε τεχνικά κείμενα, επισημαίνοντας τις διαφορές με τα γενικού σκοπού datasets. Οι \cite{calefato2018sentiment} μελέτησαν την ακρίβεια εργαλείων ανάλυσης συναισθήματος σε περιβάλλοντα ανάπτυξης λογισμικού.
+
+Οι \cite{zhang2018deep} παρουσίασαν μια εκτενή επισκόπηση των μεθόδων βαθιάς μάθησης για ανάλυση συναισθήματος, εντοπίζοντας τις κύριες προκλήσεις: ανεπίσημο ύφος γραφής και χρήση αργκό, ορθογραφικά λάθη και συντομογραφίες, ειρωνεία και σαρκασμός, έλλειψη context, και πολυγλωσσικό περιεχόμενο.
+
+
+
+
+
+
+
+
+
+\subsubsection{Συσχέτιση Συναισθημάτων με Χαρακτηριστικά Χρήστη}
+\label{sec:Συσχέτιση Συναισθημάτων με Χαρακτηριστικά Χρήστη}
+
+Οι \cite{lin2022opinion} διερεύνησαν τη σχέση μεταξύ συναισθημάτων και ποιότητας απαντήσεων στο Stack Overflow, δείχνοντας ότι οι απαντήσεις με θετικό συναισθηματικό τόνο τείνουν να λαμβάνουν υψηλότερες βαθμολογίες.
+
+Οι \cite{sokolova2009systematic} παρουσίασαν μια συστηματική ανάλυση των μετρικών αξιολόγησης για ταξινόμηση, συμπεριλαμβανομένων precision, recall, F1-score και accuracy, αναλύοντας τις ιδιότητες και την καταλληλότητά τους για διαφορετικά σενάρια.
+
+Ο \cite{cohen1960coefficient} εισήγαγε το Cohen's Kappa, μια μετρική που μετρά τη συμφωνία μεταξύ δύο ταξινομητών λαμβάνοντας υπόψη τη συμφωνία που θα προέκυπτε τυχαία:
+
+\begin{equation}
+\kappa = \frac{p_o - p_e}{1 - p_e}
+\end{equation}
+
+όπου $p_o$ είναι η παρατηρούμενη συμφωνία και $p_e$ είναι η αναμενόμενη τυχαία συμφωνία.
+
+Ο \cite{mcnemar1947note} πρότεινε το McNemar's test για τη σύγκριση της απόδοσης δύο ταξινομητών στα ίδια δεδομένα:
+
+\begin{equation}
+\chi^2 = \frac{(b - c)^2}{b + c}
+\end{equation}
+
+όπου $b$ και $c$ είναι οι αριθμοί των δειγμάτων στα οποία τα δύο μοντέλα διαφωνούν.
+
+Το GoEmotions, που δημιουργήθηκε από τους \cite{demszky2020goemotions}, αποτελεί το μεγαλύτερο χειροκίνητα επισημασμένο dataset συναισθημάτων στην αγγλική γλώσσα. Περιλαμβάνει 58.000 σχόλια από το Reddit, επισημασμένα με 27 κατηγορίες συναισθημάτων συν μια ουδέτερη κατηγορία. Οι κατηγορίες οργανώνονται σε τρεις ομάδες: Θετικά (12), Αρνητικά (11), και Ουδέτερα/Αμφίσημα (5).
+
+\paragraph{Στρατηγικές Fine-tuning και Παραλλαγές BERT:}
+
+Οι \cite{sun2019fine} διερεύνησαν διάφορες στρατηγικές fine-tuning του BERT για ταξινόμηση κειμένου, προτείνοντας τεχνικές όπως το further pre-training σε domain-specific δεδομένα και τη σταδιακή αποδέσμευση (gradual unfreezing) των επιπέδων.
+
+Οι \cite{gao2019target} εφάρμοσαν το BERT για aspect-based sentiment analysis, προσθέτοντας ένα auxiliary sentence που περιέχει τον στόχο (aspect) για να κατευθύνει την προσοχή του μοντέλου.
+
+Πολλές παραλλαγές του BERT έχουν προταθεί για τη βελτίωση διαφόρων πτυχών. Οι \cite{sanh2019distilbert} ανέπτυξαν το DistilBERT, μια συμπαγή έκδοση του BERT χρησιμοποιώντας knowledge distillation, διατηρώντας το 97\% των επιδόσεων με 40\% λιγότερες παραμέτρους. Οι \cite{lan2019albert} πρότειναν το ALBERT με τεχνικές μείωσης παραμέτρων όπως factorized embedding parameterization και cross-layer parameter sharing.
+
+\paragraph{RoBERTa και Βαθμονόμηση Μοντέλων:}
+
+Το RoBERTa (Robustly Optimized BERT Pretraining Approach), που παρουσιάστηκε από τους \cite{liu2019roberta}, βελτιστοποίησε τη διαδικασία προεκπαίδευσης του BERT μέσω συστηματικών πειραμάτων. Οι κύριες αλλαγές περιλαμβάνουν:
+
+\begin{itemize}
+    \item \textbf{Κατάργηση NSP:} Η εργασία Next Sentence Prediction αφαιρέθηκε, καθώς αποδείχθηκε ότι δεν συνεισφέρει σημαντικά στην απόδοση.
+    \item \textbf{Dynamic Masking:} Αντί για στατικό masking, το pattern μασκαρίσματος αλλάζει σε κάθε epoch.
+    \item \textbf{Μεγαλύτερα Batches:} Χρήση μεγαλύτερων batch sizes για βελτιωμένη σύγκλιση.
+    \item \textbf{Περισσότερα Δεδομένα:} Προεκπαίδευση σε μεγαλύτερο corpus (160GB αντί για 16GB).
+\end{itemize}
+
+Οι \cite{liu2019roberta} έδειξαν ότι το RoBERTa υπερτερεί του BERT σε διάφορα benchmarks, συμπεριλαμβανομένων των GLUE, RACE και SQuAD. Οι \cite{desai2020calibration} διερεύνησαν τη βαθμονόμηση (calibration) των προβλέψεων μοντέλων βασισμένων σε Transformers, δείχνοντας ότι τα μεγάλα προεκπαιδευμένα μοντέλα τείνουν να είναι υπερβολικά σίγουρα (overconfident) για τις προβλέψεις τους.
+
+\paragraph{Μεγάλα Γλωσσικά Μοντέλα (LLMs):}
+
+Η ανάπτυξη μεγάλων γλωσσικών μοντέλων όπως το GPT-3 \cite{brown2020language} έχει ανοίξει νέες δυνατότητες για την ανάλυση συναισθήματος μέσω in-context learning και prompting. Οι \cite{zhang2023sentiment} διερεύνησαν τις δυνατότητες του ChatGPT για ανάλυση συναισθήματος, διαπιστώνοντας ότι ενώ επιτυγχάνει εντυπωσιακές επιδόσεις σε γενικές εργασίες, τα εξειδικευμένα fine-tuned μοντέλα παραμένουν ανταγωνιστικά σε domain-specific εφαρμογές.
+
+\paragraph{Σύνοψη Βιβλιογραφικής Επισκόπησης:}
+
+Η βιβλιογραφική επισκόπηση αποκάλυψε τη σημαντική εξέλιξη του πεδίου της ανάλυσης συναισθήματος, από τις πρώιμες μεθόδους βασισμένες σε λεξικά έως τα σύγχρονα μοντέλα Transformer. Τα μοντέλα BERT και RoBERTa αντιπροσωπεύουν την τρέχουσα κατάσταση της τεχνολογίας, επιτυγχάνοντας εξαιρετικές επιδόσεις σε ποικίλες εργασίες ανάλυσης συναισθήματος.
+
+\begin{table}[H]
+\centering
+\caption{Σύνοψη Κύριων Ερευνητικών Εργασιών}
+\label{tab:literature_summary}
+\begin{tabular}{@{}llp{5cm}@{}}
+\toprule
+\textbf{Κατηγορία} & \textbf{Εργασία} & \textbf{Συνεισφορά} \\
+\midrule
+\multirow{2}{*}{Παραδοσιακές Μέθοδοι} & Pang et al. (2002) & ML για ανάλυση κριτικών \\
+& Hutto \& Gilbert (2014) & VADER για social media \\
+\midrule
+\multirow{2}{*}{Word Embeddings} & Mikolov et al. (2013) & Word2Vec \\
+& Pennington et al. (2014) & GloVe \\
+\midrule
+\multirow{2}{*}{Deep Learning} & Kim (2014) & CNN για κείμενο \\
+& Hochreiter \& Schmidhuber (1997) & LSTM \\
+\midrule
+\multirow{4}{*}{Transformer} & Vaswani et al. (2017) & Αρχιτεκτονική Transformer \\
+& Devlin et al. (2018) & BERT \\
+& Liu et al. (2019) & RoBERTa \\
+& Sanh et al. (2019) & DistilBERT \\
+\midrule
+Datasets & Demszky et al. (2020) & GoEmotions \\
+\midrule
+\multirow{2}{*}{Μετρικές Αξιολόγησης} & Cohen (1960) & Cohen's Kappa \\
+& McNemar (1947) & McNemar's Test \\
+\midrule
+LLMs & Brown et al. (2020) & GPT-3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+
+
+% ============================================================
+\section{Τα Μοντέλα που χρησιμοποιήθηκαν}
+\label{sec:Τα Μοντέλα που χρησιμοποιήθηκαν}
+
+Στην παρούσα ενότητα παρουσιάζονται τα δύο προ-εκπαιδευμένα μοντέλα γλωσσικής κατανόησης που χρησιμοποιήθηκαν για την ανάλυση συναισθήματος: το BERT (Bidirectional Encoder Representations from Transformers) και το RoBERTa (Robustly Optimized BERT Pretraining Approach). Αμφότερα τα μοντέλα βασίζονται στην αρχιτεκτονική Transformer και αποτελούν σημεία αναφοράς στον τομέα της Επεξεργασίας Φυσικής Γλώσσας (NLP).
+
+% ============================================================
+\subsection{BERT: Bidirectional Encoder Representations from Transformers}
+\label{sec:BERT GoEmotions}
+
+\subsubsection{Θεωρητικό Υπόβαθρο}
+\label{sec:Θεωρητικό Υπόβαθρο BERT}
+
+Το BERT αναπτύχθηκε από την Google AI Language και παρουσιάστηκε το 2018. Αποτελεί ένα από τα πλέον επιδραστικά μοντέλα στον τομέα της Επεξεργασίας Φυσικής Γλώσσας, καθώς εισήγαγε την έννοια της \textit{αμφίδρομης} (bidirectional) προ-εκπαίδευσης σε γλωσσικά μοντέλα.
+
+Η θεμελιώδης καινοτομία του BERT έγκειται στην ικανότητά του να μαθαίνει συμφραζόμενες αναπαραστάσεις λέξεων (contextual word representations) λαμβάνοντας υπόψη τόσο το αριστερό όσο και το δεξί περιβάλλον μιας λέξης ταυτόχρονα. Αυτό επιτυγχάνεται μέσω του μηχανισμού \textit{Masked Language Modeling} (MLM), κατά τον οποίο τυχαία tokens της εισόδου καλύπτονται (masked) και το μοντέλο εκπαιδεύεται να τα προβλέψει.
+
+\subsubsection{Αρχιτεκτονική}
+\label{sec:Αρχιτεκτονική BERT}
+
+Η αρχιτεκτονική του BERT βασίζεται αποκλειστικά στον κωδικοποιητή (encoder) του Transformer. Τα κύρια χαρακτηριστικά περιλαμβάνουν:
+
+\begin{itemize}
+    \item \textbf{Επίπεδα Transformer:} Το BERT-base αποτελείται από 12 επίπεδα (layers), ενώ το BERT-large από 24 επίπεδα.
+    \item \textbf{Κεφαλές Προσοχής:} 12 κεφαλές προσοχής (attention heads) για το base μοντέλο και 16 για το large.
+    \item \textbf{Κρυφή Διάσταση:} 768 μονάδες για το base και 1024 για το large μοντέλο.
+    \item \textbf{Παράμετροι:} Περίπου 110 εκατομμύρια παράμετροι για το BERT-base.
+\end{itemize}
+
+Μαθηματικά, ο μηχανισμός self-attention υπολογίζεται ως:
+
+\begin{equation}
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\label{eq:attention}
+\end{equation}
+
+\noindent όπου $Q$, $K$, $V$ αντιπροσωπεύουν τους πίνακες Query, Key και Value αντίστοιχα, και $d_k$ είναι η διάσταση των κλειδιών.
+
+\subsubsection{Προ-εκπαίδευση}
+\label{sec:Προ-εκπαίδευση BERT}
+
+Η προ-εκπαίδευση του BERT πραγματοποιείται με δύο στόχους:
+
+\begin{enumerate}
+    \item \textbf{Masked Language Modeling (MLM):} Τυχαίο 15\% των tokens καλύπτονται και το μοντέλο προβλέπει τα αρχικά tokens.
+    \item \textbf{Next Sentence Prediction (NSP):} Το μοντέλο μαθαίνει να προβλέπει εάν δύο προτάσεις είναι διαδοχικές στο αρχικό κείμενο.
+\end{enumerate}
+
+\subsubsection{Χρησιμοποιούμενο Μοντέλο: BERT GoEmotions}
+\label{sec:Χρησιμοποιούμενο Μοντέλο BERT GoEmotions}
+
+Στην παρούσα εργασία χρησιμοποιήθηκε το μοντέλο \texttt{monologg/bert-base-cased-goemotions-original} από την πλατφόρμα Hugging Face\footnote{\url{https://huggingface.co/monologg/bert-base-cased-goemotions-original}}. Το συγκεκριμένο μοντέλο έχει λεπτο-ρυθμιστεί (fine-tuned) στο σύνολο δεδομένων GoEmotions της Google, το οποίο περιλαμβάνει 58.000 σχόλια από το Reddit με ετικέτες για 27 διακριτά συναισθήματα συν μία κατηγορία ``neutral''.
+
+Τα 28 συναισθήματα του GoEmotions περιλαμβάνουν: admiration, amusement, anger, annoyance, approval, caring, confusion, curiosity, desire, disappointment, disapproval, disgust, embarrassment, excitement, fear, gratitude, grief, joy, love, nervousness, optimism, pride, realization, relief, remorse, sadness, surprise και neutral.
+
+Η υλοποίηση της ανάλυσης συναισθήματος με το BERT πραγματοποιήθηκε μέσω της βιβλιοθήκης Transformers της Hugging Face. Η αναλυτική περιγραφή του κώδικα και της διαδικασίας εφαρμογής παρουσιάζεται στην Ενότητα \ref{sec:Πειράματα Μάθησης}.
+
+% ============================================================
+\subsection{RoBERTa: Robustly Optimized BERT Pretraining Approach}
+\label{sec:RoBERTa GoEmotions}
+
+\subsubsection{Θεωρητικό Υπόβαθρο}
+\label{sec:Θεωρητικό Υπόβαθρο RoBERTa}
+
+Το RoBERTa αναπτύχθηκε από την Facebook AI (Meta AI) και παρουσιάστηκε το 2019. Αποτελεί μια βελτιστοποιημένη έκδοση του BERT, η οποία διατηρεί την ίδια αρχιτεκτονική αλλά τροποποιεί σημαντικά τη διαδικασία προ-εκπαίδευσης.
+
+Οι ερευνητές της Meta AI διαπίστωσαν ότι το αρχικό BERT ήταν σημαντικά υπο-εκπαιδευμένο (undertrained) και ότι με προσεκτική ρύθμιση των υπερπαραμέτρων και της διαδικασίας εκπαίδευσης, η απόδοση μπορούσε να βελτιωθεί σημαντικά.
+
+
+\subsubsection{Βασικές Διαφορές από το BERT}
+\label{sec:Βασικές Διαφορές από το BERT}
+
+Το RoBERTa διαφοροποιείται από το BERT στα εξής σημεία:
+
+\begin{enumerate}
+    \item \textbf{Αφαίρεση του NSP:} Η εργασία Next Sentence Prediction αφαιρέθηκε, καθώς αποδείχθηκε ότι δεν συνεισφέρει στην απόδοση ή ακόμη και την μειώνει.
+    
+    \item \textbf{Δυναμικό Masking:} Αντί για στατικό masking που εφαρμόζεται μία φορά κατά την προ-επεξεργασία, το RoBERTa χρησιμοποιεί δυναμικό masking όπου το μοτίβο masking αλλάζει σε κάθε epoch.
+    
+    \item \textbf{Μεγαλύτερα Batches:} Χρήση batch size 8.000 αντί για 256 του BERT.
+    
+    \item \textbf{Περισσότερα Δεδομένα Εκπαίδευσης:} Εκπαίδευση σε 160GB κειμένου αντί για 16GB του BERT.
+    
+    \item \textbf{Μεγαλύτερες Ακολουθίες:} Εκπαίδευση σε μεγαλύτερες ακολουθίες κειμένου.
+    
+    \item \textbf{Byte-Level BPE:} Χρήση Byte-Pair Encoding σε επίπεδο byte αντί για character-level.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Σύγκριση παραμέτρων προ-εκπαίδευσης BERT και RoBERTa}
+\label{tab:bert_roberta_comparison}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Παράμετρος} & \textbf{BERT} & \textbf{RoBERTa} \\
+\midrule
+Δεδομένα εκπαίδευσης & 16GB & 160GB \\
+Batch size & 256 & 8,000 \\
+Βήματα εκπαίδευσης & 1M & 500K \\
+Next Sentence Prediction & Ναι & Όχι \\
+Masking & Στατικό & Δυναμικό \\
+Tokenization & WordPiece & Byte-level BPE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\subsubsection{Προ-εκπαίδευση}
+\label{sec:Προ-εκπαίδευση RoBERTa}
+
+Η προ-εκπαίδευση του RoBERTa διαφοροποιείται σημαντικά από αυτή του BERT:
+
+\begin{enumerate}
+    \item \textbf{Masked Language Modeling (MLM) μόνο:} Σε αντίθεση με το BERT, το RoBERTa χρησιμοποιεί αποκλειστικά την εργασία MLM, καθώς αποδείχθηκε ότι η Next Sentence Prediction (NSP) δεν συνεισφέρει στην απόδοση.
+    
+    \item \textbf{Δυναμικό Masking:} Το μοτίβο masking δημιουργείται δυναμικά σε κάθε epoch εκπαίδευσης, αντί να εφαρμόζεται στατικά μία φορά κατά την προ-επεξεργασία. Αυτό επιτρέπει στο μοντέλο να βλέπει διαφορετικές παραλλαγές του ίδιου κειμένου.
+    
+    \item \textbf{Μεγαλύτερη Κλίμακα Εκπαίδευσης:} Εκπαίδευση με batch size 8.000 (αντί για 256) σε 160GB δεδομένων κειμένου (αντί για 16GB), επιτρέποντας καλύτερη γενίκευση.
+\end{enumerate}
+
+
+
+
+
+
+
+\subsubsection{Χρησιμοποιούμενο Μοντέλο: RoBERTa GoEmotions}
+\label{sec:Χρησιμοποιούμενο Μοντέλο RoBERTa GoEmotions}
+
+Στην παρούσα εργασία χρησιμοποιήθηκε το μοντέλο \texttt{SamLowe/roberta-base-go\_emotions} από την πλατφόρμα Hugging Face\footnote{\url{https://huggingface.co/SamLowe/roberta-base-go_emotions}}. Όπως και το αντίστοιχο BERT μοντέλο, έχει λεπτο-ρυθμιστεί στο σύνολο δεδομένων GoEmotions για την ταξινόμηση 28 συναισθημάτων.
+
+Το συγκεκριμένο μοντέλο επιλέχθηκε λόγω της υψηλής απόδοσής του σε benchmarks ανάλυσης συναισθήματος και της ευρείας αποδοχής του από την ερευνητική κοινότητα.
+
+Η υλοποίηση για το RoBERTa ακολουθεί παρόμοια δομή με αυτή του BERT. Η αναλυτική περιγραφή του κώδικα παρουσιάζεται στην Ενότητα \ref{sec:Πειράματα Μάθησης}.
+
+% ============================================================
+\subsection{Αντιστοίχιση Συναισθημάτων σε Κατηγορίες Sentiment}
+\label{sec:Αντιστοίχιση Συναισθημάτων σε Κατηγορίες Sentiment}
+
+Για τη διευκόλυνση της συγκριτικής ανάλυσης, τα 28 συναισθήματα του GoEmotions αντιστοιχίστηκαν σε τρεις ευρύτερες κατηγορίες sentiment: θετικό (positive), αρνητικό (negative) και ουδέτερο (neutral). Η αντιστοίχιση αυτή βασίστηκε στη συναισθηματική βαλεντικότητα (valence) κάθε συναισθήματος. Ο αναλυτικός κώδικας αντιστοίχισης παρουσιάζεται στην Ενότητα \ref{sec:Πειράματα Μάθησης}.
+
+\begin{table}[htbp]
+\centering
+\caption{Κατηγοριοποίηση συναισθημάτων GoEmotions}
+\label{tab:emotion_categories}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Κατηγορία} & \textbf{Συναισθήματα} \\
+\midrule
+Θετικά (12) & admiration, amusement, approval, caring, desire, \\
+            & excitement, gratitude, joy, love, optimism, pride, relief \\
+\midrule
+Αρνητικά (11) & anger, annoyance, disappointment, disapproval, disgust, \\
+              & embarrassment, fear, grief, nervousness, remorse, sadness \\
+\midrule
+Ουδέτερα (5) & confusion, curiosity, neutral, realization, surprise \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Σύγκριση Αρχιτεκτονικών}
+\label{sec:Σύγκριση Αρχιτεκτονικών}
+
+Παρά τις ομοιότητες στη βασική αρχιτεκτονική, τα δύο μοντέλα παρουσιάζουν σημαντικές διαφορές που επηρεάζουν την απόδοσή τους:
+
+\begin{table}[htbp]
+\centering
+\caption{Αναλυτική σύγκριση BERT και RoBERTa}
+\label{tab:detailed_comparison}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Χαρακτηριστικό} & \textbf{BERT-base} & \textbf{RoBERTa-base} \\
+\midrule
+Επίπεδα Transformer & 12 & 12 \\
+Κεφαλές Προσοχής & 12 & 12 \\
+Κρυφή Διάσταση & 768 & 768 \\
+Παράμετροι & 110M & 125M \\
+Λεξιλόγιο & 30,522 & 50,265 \\
+Tokenizer & WordPiece & Byte-level BPE \\
+Μέγιστο Μήκος & 512 tokens & 512 tokens \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Πλεονεκτήματα και Μειονεκτήματα}
+\label{sec:Πλεονεκτήματα και Μειονεκτήματα}
+
+\subsubsection{BERT}
+\label{sec:Πλεονεκτήματα Μειονεκτήματα BERT}
+
+\textbf{Πλεονεκτήματα:}
+\begin{itemize}
+    \item Πρωτοποριακό μοντέλο με εκτεταμένη τεκμηρίωση και υποστήριξη
+    \item Ελαφρύτερο μοντέλο με λιγότερες παραμέτρους
+    \item Ευρεία γκάμα προ-εκπαιδευμένων εκδόσεων για διάφορες γλώσσες
+\end{itemize}
+
+\textbf{Μειονεκτήματα:}
+\begin{itemize}
+    \item Υπο-εκπαίδευση σε σχέση με νεότερα μοντέλα
+    \item Το NSP task μπορεί να εισάγει θόρυβο
+    \item Στατικό masking περιορίζει τη γενίκευση
+\end{itemize}
+
+\subsubsection{RoBERTa}
+\label{sec:Πλεονεκτήματα Μειονεκτήματα RoBERTa}
+
+\textbf{Πλεονεκτήματα:}
+\begin{itemize}
+    \item Βελτιωμένη απόδοση λόγω βελτιστοποιημένης εκπαίδευσης
+    \item Δυναμικό masking για καλύτερη γενίκευση
+    \item Εκπαίδευση σε περισσότερα δεδομένα
+    \item Καλύτερη βαθμονόμηση εμπιστοσύνης (confidence calibration)
+\end{itemize}
+
+\textbf{Μειονεκτήματα:}
+\begin{itemize}
+    \item Υψηλότερες υπολογιστικές απαιτήσεις κατά την εκπαίδευση
+    \item Μεγαλύτερο μέγεθος λεξιλογίου
+\end{itemize}
+
+% ============================================================
+\subsection{Hugging Face: Η Πλατφόρμα Φόρτωσης Μοντέλων}
+\label{sec:Hugging Face Η Πλατφόρμα Φόρτωσης Μοντέλων}
+
+Τα μοντέλα που χρησιμοποιήθηκαν στην παρούσα εργασία αντλήθηκαν από την πλατφόρμα Hugging Face Hub\footnote{\url{https://huggingface.co/}}, η οποία αποτελεί το κορυφαίο αποθετήριο για προ-εκπαιδευμένα μοντέλα μηχανικής μάθησης.
+
+Η Hugging Face παρέχει:
+\begin{itemize}
+    \item Πρόσβαση σε χιλιάδες προ-εκπαιδευμένα μοντέλα
+    \item Τυποποιημένο API μέσω της βιβλιοθήκης \texttt{transformers}
+    \item Αυτόματη λήψη και caching μοντέλων
+    \item Τεκμηρίωση και model cards για κάθε μοντέλο
+    \item Δυνατότητα εύκολης σύγκρισης μοντέλων
+\end{itemize}
+
+Τα συγκεκριμένα μοντέλα που επιλέχθηκαν:
+\begin{itemize}
+    \item \textbf{BERT:} \texttt{monologg/bert-base-cased-goemotions-original}
+    \item \textbf{RoBERTa:} \texttt{SamLowe/roberta-base-go\_emotions}
+\end{itemize}
+
+
+
+
+
+
+\\
+\\
+
+% ============================================================
+
+\section{Μεθοδολογική Διαδικασία}
+\label{sec:Μεθοδολογική Διαδικασία}
+
+Η παρούσα ενότητα περιγράφει τη μεθοδολογική διαδικασία που ακολουθήθηκε για την εκπόνηση της έρευνας. Η μεθοδολογία διαρθρώνεται σε πέντε φάσεις: (1) Συλλογή Δεδομένων από το Stack Overflow, (2) Προ-επεξεργασία και Καθαρισμός Κειμένου, (3) Διερευνητική Ανάλυση Δεδομένων, (4) Εφαρμογή Μοντέλων BERT και RoBERTa, και (5) Στατιστική Αξιολόγηση των αποτελεσμάτων.
+
+
+\subsection{Πηγή Δεδομένων}
+
+Για την εκπόνηση της παρούσας πτυχιακής εργασίας χρησιμοποιήθηκε το \textbf{Stack Overflow Data}, ένα δημόσια διαθέσιμο σύνολο δεδομένων που φιλοξενείται στην πλατφόρμα Google BigQuery και είναι προσβάσιμο μέσω του Kaggle\footnote{\url{https://www.kaggle.com/datasets/stackoverflow/stackoverflow}}. Το συγκεκριμένο dataset αποτελεί ένα από τα πλέον εκτενή και αξιόπιστα σύνολα δεδομένων για την ανάλυση διαδικτυακών τεχνικών κοινοτήτων, καθώς περιέχει το σύνολο των δημοσιεύσεων, σχολίων και πληροφοριών χρηστών της πλατφόρμας Stack Overflow από την ίδρυσή της έως σήμερα.
+
+Το Stack Overflow αποτελεί τη μεγαλύτερη διαδικτυακή κοινότητα προγραμματιστών παγκοσμίως, με εκατομμύρια ενεργούς χρήστες που ανταλλάσσουν γνώσεις, θέτουν ερωτήσεις και παρέχουν απαντήσεις σε τεχνικά ζητήματα. Η επιλογή αυτού του dataset κρίθηκε κατάλληλη για την παρούσα έρευνα, καθώς τα σχόλια των χρηστών αντικατοπτρίζουν ένα ευρύ φάσμα συναισθημάτων, από την ικανοποίηση και την ευγνωμοσύνη έως την απογοήτευση και την κριτική.
+
+\subsubsection{Δομή και Πίνακες Δεδομένων}
+
+Η πρόσβαση στα δεδομένα πραγματοποιήθηκε μέσω του Google BigQuery API, το οποίο επιτρέπει την εκτέλεση SQL ερωτημάτων σε μεγάλα σύνολα δεδομένων. Για τις ανάγκες της έρευνας, χρησιμοποιήθηκαν τρεις πίνακες από το δημόσιο dataset \texttt{bigquery-public-data.stackoverflow}:
+
+\begin{enumerate}
+    \item \textbf{comments}: Περιέχει τα σχόλια των χρηστών σε δημοσιεύσεις. Αποτελεί τον κύριο πίνακα για την ανάλυση συναισθήματος.
+    
+    \item \textbf{posts\_answers}: Περιέχει πληροφορίες για τις δημοσιεύσεις και τις απαντήσεις, συμπεριλαμβανομένων μετρικών δημοτικότητας.
+    
+    \item \textbf{users}: Περιέχει τα δημογραφικά στοιχεία και τις μετρικές δραστηριότητας των χρηστών.
+\end{enumerate}
+
+Ο Πίνακας \ref{tab:dataset_columns} παρουσιάζει αναλυτικά τα πεδία (columns) που εξήχθησαν από κάθε πίνακα.
+
+\begin{table}[H]
+\centering
+\caption{Πεδία δεδομένων ανά πίνακα}
+\label{tab:dataset_columns}
+\begin{tabular}{@{}llp{7cm}@{}}
+\toprule
+\textbf{Πίνακας} & \textbf{Πεδίο} & \textbf{Περιγραφή} \\
+\midrule
+\multirow{5}{*}{comments} 
+    & id & Μοναδικός αναγνωριστικός αριθμός σχολίου \\
+    & text & Το κείμενο του σχολίου \\
+    & post\_id & Αναγνωριστικό της σχετικής δημοσίευσης \\
+    & user\_id & Αναγνωριστικό του χρήστη που έγραψε το σχόλιο \\
+    & score & Βαθμολογία του σχολίου (upvotes) \\
+\midrule
+\multirow{4}{*}{posts\_answers} 
+    & id & Μοναδικός αναγνωριστικός αριθμός δημοσίευσης \\
+    & comment\_count & Αριθμός σχολίων στη δημοσίευση \\
+    & favorite\_count & Αριθμός αγαπημένων \\
+    & score & Βαθμολογία της δημοσίευσης \\
+\midrule
+\multirow{7}{*}{users} 
+    & id & Μοναδικός αναγνωριστικός αριθμός χρήστη \\
+    & display\_name & Εμφανιζόμενο όνομα χρήστη \\
+    & age & Ηλικία χρήστη \\
+    & location & Γεωγραφική τοποθεσία \\
+    & reputation & Βαθμός φήμης στην πλατφόρμα \\
+    & up\_votes & Συνολικές θετικές ψήφοι \\
+    & down\_votes & Συνολικές αρνητικές ψήφοι \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Στρατηγική Δειγματοληψίας}
+
+Λόγω του τεράστιου όγκου δεδομένων του Stack Overflow (δεκάδες εκατομμύρια σχόλια), εφαρμόστηκε τυχαία δειγματοληψία (random sampling) για την εξαγωγή ενός αντιπροσωπευτικού υποσυνόλου. Συγκεκριμένα:
+
+\begin{itemize}
+    \item Εφαρμόστηκε τυχαία δειγματοληψία με πιθανότητα 5\% (\texttt{RAND() < 0.05}) στον πίνακα σχολίων.
+    \item Ορίστηκε ανώτατο όριο 110.000 σχολίων για τη διασφάλιση της υπολογιστικής αποδοτικότητας.
+    \item Οι πίνακες \texttt{posts\_answers} και \texttt{users} φιλτραρίστηκαν ώστε να περιλαμβάνουν μόνο τις εγγραφές που σχετίζονται με τα δειγματοληπτικά σχόλια, μέσω συνένωσης βάσει των πεδίων \texttt{post\_id} και \texttt{user\_id}.
+\end{itemize}
+
+Η προσέγγιση αυτή διασφαλίζει τη συνοχή των δεδομένων μεταξύ των τριών πινάκων, επιτρέποντας τη διασύνδεση σχολίων με τις αντίστοιχες δημοσιεύσεις και χρήστες για πολυδιάστατη ανάλυση.
+
+\subsubsection{Κώδικας Εξαγωγής Δεδομένων}
+
+Η εξαγωγή των δεδομένων πραγματοποιήθηκε μέσω του περιβάλλοντος Kaggle Notebooks με χρήση της βιβλιοθήκης \texttt{google-cloud-bigquery} της Python. Ο Κώδικας \ref{lst:data_extraction} παρουσιάζει την πλήρη διαδικασία εξαγωγής.
+
+\begin{lstlisting}[language=Python, caption={Εξαγωγή δεδομένων από Google BigQuery}, label={lst:data_extraction}]
+import numpy as np
+import pandas as pd
+import os
+from google.cloud import bigquery
+
+# Initialize BigQuery client
+bq_client = bigquery.Client()
+
+# SAMPLE COMMENTS FIRST  
+query_comments = """
+    SELECT id, text, post_id, user_id, score
+    FROM `bigquery-public-data.stackoverflow.comments`
+    WHERE RAND() < 0.05
+    LIMIT 110000
+"""
+comments_df = bq_client.query(query_comments).to_dataframe()
+print(f"Sampled comments: {comments_df.shape}")
+
+# GET UNIQUE POST_IDS AND USER_IDS
+post_ids = comments_df["post_id"].dropna().unique().tolist()
+user_ids = comments_df["user_id"].dropna().unique().tolist()
+print(f"Unique post IDs: {len(post_ids)}")
+print(f"Unique user IDs: {len(user_ids)}")
+
+# GET ONLY MATCHING POSTS
+query_posts = """
+    SELECT id, comment_count, favorite_count, score
+    FROM `bigquery-public-data.stackoverflow.posts_answers`
+    WHERE id IN UNNEST(@post_ids)
+"""
+job_config = bigquery.QueryJobConfig(
+    query_parameters=[
+        bigquery.ArrayQueryParameter("post_ids", "INT64", post_ids)
+    ]
+)
+posts_df = bq_client.query(query_posts, job_config=job_config).to_dataframe()
+print(f"Fetched posts: {posts_df.shape}")
+
+# GET ONLY MATCHING USERS
+query_users = """
+    SELECT id, display_name, age, location, reputation, up_votes, down_votes
+    FROM `bigquery-public-data.stackoverflow.users`
+    WHERE id IN UNNEST(@user_ids)
+"""
+job_config = bigquery.QueryJobConfig(
+    query_parameters=[
+        bigquery.ArrayQueryParameter("user_ids", "INT64", user_ids)
+    ]
+)
+users_df = bq_client.query(query_users, job_config=job_config).to_dataframe()
+print(f"Fetched users: {users_df.shape}")
+
+# SAVE TO CSV FORMAT
+comments_df.to_csv("/kaggle/working/comments.csv", index=False)
+posts_df.to_csv("/kaggle/working/posts_answers.csv", index=False)
+users_df.to_csv("/kaggle/working/users.csv", index=False)
+\end{lstlisting}
+\\
+
+\subsubsection{Στατιστικά Στοιχεία Εξαχθέντων Δεδομένων}
+
+Ο Πίνακας \ref{tab:dataset_stats} συνοψίζει τα στατιστικά στοιχεία του εξαχθέντος συνόλου δεδομένων.
+
+\begin{table}[H]
+\centering
+\caption{Στατιστικά στοιχεία εξαχθέντος συνόλου δεδομένων}
+\label{tab:dataset_stats}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Πίνακας} & \textbf{Αριθμός Εγγραφών} & \textbf{Αριθμός Πεδίων} \\
+\midrule
+comments & 110.000 & 5 \\
+posts\_answers & 50853 & 4 \\
+users & 54836 & 7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Τα εξαχθέντα δεδομένα αποθηκεύτηκαν σε τρία αρχεία μορφής CSV (\texttt{comments.csv}, \texttt{posts\_answers.csv}, \texttt{users.csv}) για περαιτέρω επεξεργασία και ανάλυση.
+
+
+\subsection{Βιβλιοθήκες και Περιγραφή Δεδομένων }
+\label{sec:Περιγραφή Δεδομένων}
+
+\subsubsection{Εγκατάσταση Απαιτούμενων Βιβλιοθηκών}
+
+Για την εκτέλεση του κώδικα της παρούσας εργασίας απαιτείται η εγκατάσταση συγκεκριμένων βιβλιοθηκών Python. Οι απαιτούμενες βιβλιοθήκες καταγράφηκαν στο αρχείο \texttt{requirements.txt} και η εγκατάστασή τους πραγματοποιήθηκε μέσω του εργαλείου \texttt{pip}.
+
+\begin{lstlisting}[language=Python, caption={Περιεχόμενα αρχείου requirements.txt}, label={lst:requirements}]
+pandas
+numpy
+seaborn
+matplotlib
+nltk
+emoji
+transformers
+torch
+scipy
+statsmodels
+scikit-learn
+tqdm
+ipywidgets
+\end{lstlisting}
+
+Η εγκατάσταση των βιβλιοθηκών πραγματοποιείται με την εκτέλεση της ακόλουθης εντολής:
+
+\begin{lstlisting}[language=bash, caption={Εντολή εγκατάστασης βιβλιοθηκών}, label={lst:pip_install}]
+pip install -r requirements.txt
+\end{lstlisting}
+
+
+
+\subsubsection{Εισαγωγή Βιβλιοθηκών και Αρχικοποίηση}
+
+Ο Κώδικας \ref{lst:imports} παρουσιάζει την εισαγωγή όλων των απαραίτητων βιβλιοθηκών και την αρχικοποίηση του περιβάλλοντος εκτέλεσης.
+
+\begin{lstlisting}[language=Python, caption={Εισαγωγή βιβλιοθηκών και αρχικοποίηση περιβάλλοντος}, label={lst:imports}]
+# IMPORT LIBRARIES
+import pandas as pd
+import numpy as np
+import ast
+import re
+import os
+import emoji
+import warnings
+from collections import Counter
+from difflib import SequenceMatcher
+
+# Visualization
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# NLP & Text Processing
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+
+# Transformers (Hugging Face)
+from transformers import pipeline
+import torch
+import time
+
+# Statistics
+from scipy.stats import pearsonr, spearmanr, ttest_ind
+from statsmodels.stats.contingency_tables import mcnemar
+from sklearn.metrics import (confusion_matrix, 
+                             ConfusionMatrixDisplay, 
+                             cohen_kappa_score)
+
+# Display utilities
+from IPython.display import display, HTML
+
+# Progress Bar
+from tqdm.notebook import tqdm
+
+# DOWNLOAD NLTK RESOURCES
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('punkt_tab')
+nltk.download('omw-1.4')
+nltk.download('stopwords')
+
+# Settings
+tqdm.pandas()
+warnings.filterwarnings('ignore')
+\end{lstlisting}
+
+Ο Πίνακας \ref{tab:libraries} παρουσιάζει συνοπτικά τον σκοπό κάθε βιβλιοθήκης.
+
+\begin{table}[H]
+\centering
+\caption{Περιγραφή χρησιμοποιούμενων βιβλιοθηκών}
+\label{tab:libraries}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Βιβλιοθήκη} & \textbf{Χρήση} \\
+\midrule
+pandas & Επεξεργασία και ανάλυση δεδομένων \\
+numpy & Αριθμητικοί υπολογισμοί \\
+seaborn, matplotlib & Οπτικοποίηση δεδομένων \\
+nltk & Επεξεργασία φυσικής γλώσσας \\
+emoji & Διαχείριση emojis σε κείμενα \\
+transformers & Προεκπαιδευμένα μοντέλα BERT/RoBERTa \\
+torch & Framework βαθιάς μάθησης (PyTorch) \\
+scipy, statsmodels & Στατιστικοί έλεγχοι \\
+scikit-learn & Μετρικές αξιολόγησης \\
+tqdm & Γραμμές προόδου \\
+ipywidgets & Διαδραστικά στοιχεία Jupyter \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Η εισαγωγή των βιβλιοθηκών οργανώνεται σε λογικές ομάδες:
+
+\begin{itemize}
+    \item \textbf{Βασικές βιβλιοθήκες:} Για επεξεργασία δεδομένων και γενικές λειτουργίες (\texttt{pandas}, \texttt{numpy}, \texttt{re}, \texttt{os}).
+    
+    \item \textbf{Οπτικοποίηση:} Για τη δημιουργία γραφημάτων και διαγραμμάτων (\texttt{seaborn}, \texttt{matplotlib}).
+    
+    \item \textbf{Επεξεργασία Φυσικής Γλώσσας:} Για tokenization και αφαίρεση stop words (\texttt{nltk}, \texttt{emoji}).
+    
+    \item \textbf{Μοντέλα Transformer:} Για την εφαρμογή των μοντέλων BERT και RoBERTa (\texttt{transformers}, \texttt{torch}).
+    
+    \item \textbf{Στατιστική Ανάλυση:} Για τους στατιστικούς ελέγχους και τις μετρικές αξιολόγησης (\texttt{scipy}, \texttt{statsmodels}, \texttt{sklearn}).
+\end{itemize}
+
+Επιπλέον, πραγματοποιείται λήψη των απαραίτητων πόρων της βιβλιοθήκης NLTK, συμπεριλαμβανομένων των tokenizers και των λιστών stop words για την αγγλική γλώσσα.
+
+\begin{lstlisting}[language=Python, caption={Φόρτωση δεδομένων}, label={lst:data_loading}]
+import pandas as pd
+
+comments = pd.read_csv("comments.csv")
+posts_answers = pd.read_csv("posts_answers.csv")
+users = pd.read_csv("users.csv")
+
+print("Users shape:", users.shape)
+print("Comments shape:", comments.shape)
+print("Posts_answers shape:", posts_answers.shape)
+\end{lstlisting}
+
+
+\begin{itemize}
+    \item \textbf{comments.csv:} Σχόλια χρηστών με κείμενο και βαθμολογία
+    \item \textbf{posts\_answers.csv:} Δημοσιεύσεις και απαντήσεις
+    \item \textbf{users.csv:} Πληροφορίες χρηστών (τοποθεσία, φήμη, ψήφοι)
+\end{itemize}
+
+\subsubsection{Αρχική Διερεύνηση Δεδομένων}
+
+Μετά τη φόρτωση των δεδομένων, πραγματοποιήθηκε αρχική διερευνητική ανάλυση (Exploratory Data Analysis - EDA) για την κατανόηση της δομής και των χαρακτηριστικών των τριών συνόλων δεδομένων.
+
+\paragraph{Ανάλυση Πίνακα Comments:}
+
+Ο πίνακας \texttt{comments} αποτελεί τον κύριο πίνακα της ανάλυσης. Το Σχήμα \ref{fig:1} παρουσιάζει την αρχική διερεύνηση των δεδομένων, συμπεριλαμβανομένων των ελλιπών τιμών, των περιγραφικών στατιστικών και της κατανομής βαθμολογιών.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{1.png}
+    \caption{Αρχική διερεύνηση πίνακα Comments: ελλιπείς τιμές, περιγραφικά στατιστικά και κατανομή βαθμολογιών.}
+    \label{fig:1}
+\end{figure}
+
+\paragraph{Ανάλυση Πίνακα Posts\_answers:}
+
+Ο πίνακας \texttt{posts\_answers} περιέχει πληροφορίες για τις δημοσιεύσεις. Το Σχήμα \ref{fig:2} παρουσιάζει τα περιγραφικά στατιστικά και τις κατανομές των πεδίων.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{2.png}
+    \caption{Αρχική διερεύνηση πίνακα Posts\_answers: περιγραφικά στατιστικά και κατανομές.}
+    \label{fig:2}
+\end{figure}
+
+\paragraph{Ανάλυση Πίνακα Users:}
+
+Ο πίνακας \texttt{users} περιέχει δημογραφικά στοιχεία και μετρικές δραστηριότητας των χρηστών. Το Σχήμα \ref{fig:3} παρουσιάζει τις κατανομές των μετρικών reputation, up\_votes και down\_votes, οι οποίες ακολουθούν power-law κατανομή.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.05\textwidth]{3.png}
+    \caption{Κατανομές μετρικών χρηστών: reputation, up\_votes και down\_votes.}
+    \label{fig:3}
+\end{figure}
+\newpage
+\paragraph{Γεωγραφική Κατανομή Χρηστών:}
+
+
+
+Το Σχήμα \ref{fig:4} παρουσιάζει τις 10 συχνότερες τοποθεσίες χρηστών. Η Ινδία, η Γερμανία και οι Ηνωμένες Πολιτείες αποτελούν τις κορυφαίες τοποθεσίες. Ο Πίνακας \ref{tab:top_locations} παρουσιάζει τα αναλυτικά δεδομένα.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.38\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{4.png}
+        \caption{Top 10 τοποθεσίες χρηστών βάσει αριθμού σχολίων.}
+        \label{fig:4}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \captionof{table}{Κατανομή σχολίων ανά τοποθεσία χρήστη}
+        \label{tab:top_locations}
+        \begin{tabular}{@{}lr@{}}
+            \toprule
+            \textbf{Τοποθεσία} & \textbf{Πλήθος} \\
+            \midrule
+            India & 774 \\
+            Germany & 589 \\
+            United States & 525 \\
+            London, United Kingdom & 507 \\
+            United Kingdom & 423 \\
+            Bangalore, India & 321 \\
+            Netherlands & 308 \\
+            Berlin, Germany & 273 \\
+            France & 252 \\
+            Paris, France & 233 \\
+            \midrule
+            \textbf{Σύνολο Top 10} & \textbf{4.205} \\
+            \bottomrule
+        \end{tabular}
+    \end{minipage}
+\end{figure}
+
+
+% ============================================================
+\subsection{Περιγραφή Προεπεξεργασίας}
+\label{sec:Περιγραφή Προεπεξεργασίας}
+
+Η προ-επεξεργασία περιλαμβάνει αφαίρεση HTML tags, URLs, emojis, και φιλτράρισμα βάσει ελάχιστου αριθμού λέξεων.
+
+\subsubsection{Καθαρισμός Κειμένου (Text Cleaning)}
+\label{sec:Καθαρισμός Κειμένου (Text Cleaning)}
+
+\begin{lstlisting}[caption={Text cleaning}, label={lst:clean_text}]
+# TEXT CLEANING UTILITIES
+
+
+# Regex Patterns
+URL_PATTERN = re.compile(r"http\S+|www.\S+")
+MEANINGFUL_TEXT_PATTERN = re.compile(r"\w{3,}")
+EMOJI_PATTERN = re.compile("[\U0001F600-\U0001F64F"
+                           "\U0001F300-\U0001F5FF"
+                           "\U0001F680-\U0001F6FF"
+                           "\U0001F1E0-\U0001F1FF]+", flags=re.UNICODE)
+
+def has_meaningful_text(text):
+    text = URL_PATTERN.sub("", text)
+    return bool(MEANINGFUL_TEXT_PATTERN.search(text))
+
+def remove_emojis(text):
+    return emoji.replace_emoji(text, replace="")
+
+def clean_text(text, lower=True, strip=True, remove_urls=True, remove_emojis_flag=True):
+    if pd.isna(text):
+        return ""
+
+    text = re.sub(r'<[^>]+>', '', text)  # Remove HTML tags
+        
+    if lower:
+        text = text.lower()
+    if remove_urls:
+        text = URL_PATTERN.sub("", text)
+    if remove_emojis_flag:
+        text = remove_emojis(text)
+    if strip:
+        text = text.strip()
+    return text
+
+def clean_comments(df, text_col="text", min_words=3, drop_duplicates=True, remove_emojis_flag=True, lower=True):
+    df = df.copy()
+    df = df[df[text_col].notna()]
+    df = df[df[text_col].str.strip() != ""]
+    df[text_col] = df[text_col].apply(lambda x: clean_text(x, lower=lower, remove_emojis_flag=remove_emojis_flag))
+    if drop_duplicates:
+        df = df.drop_duplicates(subset=[text_col])
+    df = df[df[text_col].str.split().str.len() >= min_words]
+    df = df[df[text_col].apply(has_meaningful_text)]
+    return df.reset_index(drop=True)
+
+comments_original_count = len(comments)
+
+# Apply cleaning
+comments = clean_comments(comments, min_words=3, remove_emojis_flag=True)
+\end{lstlisting}
+
+\begin{table}[H]
+\centering
+\caption{Αποτελέσματα καθαρισμού δεδομένων}
+\label{tab:cleaning_results}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+Αρχικός αριθμός σχολίων & 110000 \\
+Τελικός αριθμός σχολίων & 108687 \\
+Ποσοστό αφαίρεσης & 1.2\% (1313) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Επαλήθευση Ποιότητας Καθαρισμού}
+
+Μετά την εφαρμογή των διαδικασιών καθαρισμού, πραγματοποιήθηκε δειγματοληπτική επαλήθευση της ποιότητας των επεξεργασμένων κειμένων. Το Σχήμα \ref{fig:5} παρουσιάζει πέντε τυχαία επιλεγμένα καθαρισμένα σχόλια, επιβεβαιώνοντας την επιτυχή αφαίρεση HTML tags, URLs και emojis, διατηρώντας παράλληλα το ουσιαστικό περιεχόμενο του κειμένου.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{5.png}
+    \caption{Δείγμα καθαρισμένων σχολίων για επαλήθευση ποιότητας.}
+    \label{fig:5}
+\end{figure}
+
+Τα δείγματα επιβεβαιώνουν ότι τα κείμενα διατηρούν τη σημασιολογική τους ακεραιότητα και είναι κατάλληλα για ανάλυση συναισθήματος με τα μοντέλα BERT και RoBERTa.
+
+\subsubsection{Ανάλυση Μήκους Κειμένων}
+
+Πριν την εφαρμογή των μοντέλων ανάλυσης συναισθήματος, εξετάστηκε η κατανομή του μήκους των σχολίων τόσο σε αριθμό λέξεων όσο και σε αριθμό χαρακτήρων. Η ανάλυση αυτή είναι σημαντική καθώς τα μοντέλα BERT και RoBERTa έχουν όριο 512 tokens.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{6.png}
+    \caption{Κατανομή μήκους σχολίων σε αριθμό λέξεων. Η πλειονότητα των σχολίων περιέχει 10-20 λέξεις.}
+    \label{fig:6}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{7.png}
+    \caption{Κατανομή μήκους σχολίων σε αριθμό χαρακτήρων. Η κορυφή εντοπίζεται περίπου στους 50-100 χαρακτήρες.}
+    \label{fig:7}
+\end{figure}
+
+Και οι δύο κατανομές παρουσιάζουν ασυμμετρία προς τα δεξιά (right-skewed), με την πλειονότητα των σχολίων να είναι σχετικά σύντομα. Το γεγονός αυτό διασφαλίζει ότι τα περισσότερα κείμενα δεν θα υπερβαίνουν το όριο tokens των μοντέλων Transformer.
+
+\subsubsection{Προετοιμασία Δεδομένων για Ανάλυση NLP}
+\label{sec:Προετοιμασία Δεδομένων για Ανάλυση NLP}
+
+Για την ανάλυση συχνοτήτων κειμένου πραγματοποιήθηκε tokenization των σχολίων με αφαίρεση stop words και φιλτράρισμα μη αλφαβητικών χαρακτήρων. Στη συνέχεια, υπολογίστηκαν οι συχνότητες μονών λέξεων (unigrams), ζευγών λέξεων (bigrams) και τριάδων λέξεων (trigrams).
+
+\begin{lstlisting}[language=Python, caption={Tokenization και ανάλυση n-grams}, label={lst:tokenization}]
+# Unified preprocessing function 
+def preprocess_text(text):
+    tokens = word_tokenize(str(text).lower())
+    tokens = [t for t in tokens if t.isalpha() and t not in stop_words and len(t) > 2]
+    return tokens
+
+# Apply to comments
+comments['tokens'] = comments['text'].progress_apply(preprocess_text)
+
+# Generate bigrams
+bigrams_list = []
+for tokens in comments['tokens']:
+    bigrams_list.extend(list(nltk.bigrams(tokens)))
+
+# Count top bigrams
+bigram_counts = Counter(bigrams_list)
+top_bigrams = bigram_counts.most_common(20)
+\end{lstlisting}
+
+\newpage
+
+\paragraph{Ανάλυση Συχνότητας Λέξεων (Unigrams):}
+
+Το Σχήμα \ref{fig:8} παρουσιάζει τις 20 συχνότερες λέξεις στα σχόλια μετά την αφαίρεση stop words. Οι λέξεις "code", "use" και "thanks" κυριαρχούν, αντικατοπτρίζοντας τον τεχνικό χαρακτήρα της πλατφόρμας Stack Overflow καθώς και την εκδήλωση ευγνωμοσύνης μεταξύ των χρηστών.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{8.png}
+    \caption{Οι 20 συχνότερες λέξεις στα σχόλια. Κυριαρχούν τεχνικοί όροι και εκφράσεις ευγνωμοσύνης.}
+    \label{fig:8}
+\end{figure}
+
+\newpage
+
+\paragraph{Ανάλυση Bigrams:}
+
+Τα bigrams αποκαλύπτουν συνήθεις φράσεις δύο λέξεων. Το Σχήμα \ref{fig:9} παρουσιάζει τα 20 συχνότερα bigrams, όπου εντοπίζονται εκφράσεις όπως "looks like", "something like", "thank much" και "thanks help", υποδεικνύοντας τόσο τεχνικές συζητήσεις όσο και θετικές αλληλεπιδράσεις.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{9.png}
+    \caption{Τα 20 συχνότερα bigrams στα σχόλια.}
+    \label{fig:9}
+\end{figure}
+\newpage
+\paragraph{Ανάλυση Trigrams:}
+
+Τα trigrams παρέχουν ακόμη πιο λεπτομερή εικόνα των εκφράσεων. Το Σχήμα \ref{fig:10} παρουσιάζει τα 20 συχνότερα trigrams, όπου εντοπίζονται χαρακτηριστικές φράσεις της κοινότητας όπως "please let know", "works like charm", "glad could help" και "thank much help".
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{10.png}
+    \caption{Τα 20 συχνότερα trigrams στα σχόλια.}
+    \label{fig:10}
+\end{figure}
+
+Η ανάλυση n-grams αποκαλύπτει ότι τα σχόλια του Stack Overflow περιέχουν σημαντικό ποσοστό θετικών εκφράσεων (ευγνωμοσύνη, επιβεβαίωση λύσης), τεχνικής ορολογίας, καθώς και αιτημάτων για περαιτέρω βοήθεια.
+
+
+% ============================================================
+\subsection{Πειράματα Μάθησης}
+\label{sec:Πειράματα Μάθησης}
+
+Η παρούσα υποενότητα περιγράφει την εφαρμογή των μοντέλων ανάλυσης συναισθήματος στα προεπεξεργασμένα δεδομένα.
+
+\subsubsection{Ανάλυση Συναισθημάτων με GoEmotions Model}
+\label{sec:Ανάλυση Συναισθημάτων με GoEmotions Model}
+
+Για την ανάλυση συναισθήματος χρησιμοποιήθηκαν δύο προ-εκπαιδευμένα μοντέλα από την πλατφόρμα Hugging Face, τα οποία έχουν λεπτο-ρυθμιστεί (fine-tuned) στο dataset GoEmotions για την ταξινόμηση 28 διακριτών συναισθημάτων:
+
+\begin{itemize}
+    \item \textbf{RoBERTa:} \texttt{SamLowe/roberta-base-go\_emotions}
+    \item \textbf{BERT:} \texttt{monologg/bert-base-cased-goemotions-original}
+\end{itemize}
+
+Η εφαρμογή των μοντέλων πραγματοποιήθηκε μέσω της βιβλιοθήκης \texttt{transformers} της Hugging Face, χρησιμοποιώντας το pipeline API για ταξινόμηση κειμένου. Ο Κώδικας \ref{lst:model_application} παρουσιάζει την υλοποίηση.
+
+\begin{lstlisting}[language=Python, caption={Εφαρμογή μοντέλων ανάλυσης συναισθήματος}, label={lst:model_application}]
+# Check GPU availability
+device = 0 if torch.cuda.is_available() else -1
+print(f"Using device: {'GPU (CUDA)' if device == 0 else 'CPU'}")
+
+# RoBERTa GoEmotions 
+def run_roberta_goemotions(df, text_col="text", batch_size=16):
+    classifier = pipeline(
+        "text-classification",
+        model="SamLowe/roberta-base-go_emotions",
+        top_k=None,
+        device=device,
+        truncation=True
+    )
+    texts = [str(t)[:512] for t in df[text_col].tolist()]
+    
+    top_labels, top_scores, all_outputs = [], [], []
+    
+    for i in tqdm(range(0, len(texts), batch_size), 
+                  desc="Running RoBERTa GoEmotions"):
+        batch = texts[i:i+batch_size]
+        batch_results = classifier(batch)
+        
+        for result in batch_results:
+            sorted_result = sorted(result, key=lambda x: x["score"], 
+                                   reverse=True)
+            top_labels.append(sorted_result[0]["label"])
+            top_scores.append(sorted_result[0]["score"])
+            all_outputs.append({r["label"]: r["score"] for r in sorted_result})
+    
+    df["roberta_top_emotion"] = top_labels
+    df["roberta_emotion_score"] = top_scores
+    df["roberta_all_emotions"] = all_outputs
+    return df
+
+# BERT GoEmotions
+def run_bert_goemotions(df, text_col="text", batch_size=16):
+    classifier = pipeline(
+        "text-classification",
+        model="monologg/bert-base-cased-goemotions-original",
+        top_k=None,
+        device=device,
+        truncation=True
+    )
+    texts = [str(t)[:512] for t in df[text_col].tolist()]
+    
+    top_labels, top_scores, all_outputs = [], [], []
+    
+    for i in tqdm(range(0, len(texts), batch_size), 
+                  desc="Running BERT GoEmotions"):
+        batch = texts[i:i+batch_size]
+        batch_results = classifier(batch)
+        
+        for result in batch_results:
+            sorted_result = sorted(result, key=lambda x: x["score"], 
+                                   reverse=True)
+            top_labels.append(sorted_result[0]["label"])
+            top_scores.append(sorted_result[0]["score"])
+            all_outputs.append({r["label"]: r["score"] for r in sorted_result})
+    
+    df["bert_top_emotion"] = top_labels
+    df["bert_emotion_score"] = top_scores
+    df["bert_all_emotions"] = all_outputs
+    return df
+
+# Execute RoBERTa
+print("Running RoBERTa GoEmotions...")
+start_time = time.time()
+comments = run_roberta_goemotions(comments)
+print(f"RoBERTa completed in {time.time() - start_time:.2f} seconds.")
+
+# Execute BERT
+print("Running BERT GoEmotions...")
+start_time = time.time()
+comments = run_bert_goemotions(comments)
+print(f"BERT completed in {time.time() - start_time:.2f} seconds.")
+
+# Save results
+comments.to_csv("comments_with_emotions.csv", index=False)
+\end{lstlisting}
+
+Για κάθε σχόλιο, τα μοντέλα επιστρέφουν:
+\begin{itemize}
+    \item Το κυρίαρχο συναίσθημα (\texttt{top\_emotion})
+    \item Το confidence score του κυρίαρχου συναισθήματος (\texttt{emotion\_score})
+    \item Τις πιθανότητες για όλα τα 28 συναισθήματα (\texttt{all\_emotions})
+\end{itemize}
+
+Η επεξεργασία πραγματοποιήθηκε σε batches των 16 κειμένων για βελτιστοποίηση της υπολογιστικής απόδοσης. Κάθε κείμενο περικόπηκε στους 512 χαρακτήρες, το οποίο αντιστοιχεί στο μέγιστο όριο tokens των μοντέλων Transformer.
+
+\subsection{Μέθοδοι Στατιστικής Αξιολόγησης}
+\label{sec:Μέθοδοι Στατιστικής Αξιολόγησης}
+
+Για τη συγκριτική αξιολόγηση των μοντέλων BERT και RoBERTa εφαρμόστηκαν οι ακόλουθες στατιστικές μέθοδοι:
+
+\begin{itemize}
+    \item \textbf{Cohen's Kappa ($\kappa$):} Μέτρηση της συμφωνίας μεταξύ των δύο μοντέλων, λαμβάνοντας υπόψη την τυχαία συμφωνία.
+    
+    \item \textbf{McNemar's Test:} Έλεγχος για στατιστικά σημαντικές διαφορές στις προβλέψεις των μοντέλων.
+    
+    \item \textbf{Pearson Correlation:} Ανάλυση συσχέτισης μεταξύ confidence scores και μετρικών αλληλεπίδρασης.
+    
+    \item \textbf{Independent Samples t-test:} Σύγκριση των μέσων confidence scores μεταξύ BERT και RoBERTa.
+\end{itemize}
+
+Τα αναλυτικά αποτελέσματα των στατιστικών ελέγχων παρουσιάζονται στην Ενότητα \ref{sec:Ανάλυση και Αξιολόγηση}.
+
+
+% ============================================================
+\subsection{Σύνοψη Μεθοδολογικής Διαδικασίας}
+\label{sec:Σύνοψη Μεθοδολογικής Διαδικασίας}
+
+Ο Πίνακας \ref{tab:methodology_summary} συνοψίζει τα βασικά στάδια της μεθοδολογικής διαδικασίας που ακολουθήθηκε στην παρούσα εργασία.
+
+\begin{table}[H]
+\centering
+\caption{Συνοπτική παρουσίαση μεθοδολογικής διαδικασίας}
+\label{tab:methodology_summary}
+\small
+\begin{tabular}{@{}p{2.5cm}p{4.5cm}p{3.5cm}p{3.5cm}@{}}
+\toprule
+\textbf{Φάση} & \textbf{Περιγραφή} & \textbf{Εργαλεία/Τεχνικές} & \textbf{Αποτέλεσμα} \\
+\midrule
+\textbf{1. Συλλογή Δεδομένων} & 
+Εξαγωγή σχολίων, δημοσιεύσεων και χρηστών από Stack Overflow & 
+Google BigQuery API, Kaggle, SQL queries & 
+110.000 σχόλια, 50.853 posts, 54.836 χρήστες \\
+\midrule
+\textbf{2. Προ-επεξεργασία} & 
+Καθαρισμός κειμένου: αφαίρεση HTML, URLs, emojis, φιλτράρισμα & 
+Python (re, emoji), NLTK & 
+108.687 καθαρισμένα σχόλια (98.8\%) \\
+\midrule
+\textbf{3. Διερευνητική Ανάλυση} & 
+Ανάλυση κατανομών, μήκους κειμένων, n-grams & 
+NLTK tokenization, Counter & 
+Unigrams, bigrams, trigrams \\
+\midrule
+\textbf{4. Εφαρμογή Μοντέλων} & 
+Ανάλυση συναισθήματος με BERT και RoBERTa fine-tuned σε GoEmotions & 
+Hugging Face Transformers, PyTorch & 
+28 συναισθήματα + confidence scores \\
+\midrule
+\textbf{5. Στατιστική Αξιολόγηση} & 
+Σύγκριση μοντέλων και στατιστικοί έλεγχοι & 
+Cohen's Kappa, McNemar, Pearson, t-test & 
+Μετρικές συμφωνίας και σημαντικότητας \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Τεχνικές προδιαγραφές της έρευνας}
+\label{tab:technical_specs}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Παράμετρος} & \textbf{Τιμή} \\
+\midrule
+Πηγή δεδομένων & Stack Overflow (BigQuery Public Dataset) \\
+Μέγεθος δείγματος & 110.000 σχόλια (5\% τυχαία δειγματοληψία) \\
+Τελικό μέγεθος μετά καθαρισμό & 108.687 σχόλια \\
+Μοντέλο BERT & monologg/bert-base-cased-goemotions-original \\
+Μοντέλο RoBERTa & SamLowe/roberta-base-go\_emotions \\
+Dataset fine-tuning & GoEmotions (58.000 Reddit comments) \\
+Αριθμός συναισθημάτων & 28 (12 θετικά, 11 αρνητικά, 5 ουδέτερα) \\
+Μέγιστο μήκος κειμένου & 512 tokens \\
+Batch size & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\\
+\
+
+% ============================================================
+% ΕΝΟΤΗΤΑ: Ανάλυση και Αξιολόγηση Αποτελεσμάτων
+% ============================================================
+
+
+% ============================================================
+\section{Ανάλυση και Αξιολόγηση}
+\label{sec:Ανάλυση και Αξιολόγηση}
+
+Η παρούσα ενότητα παρουσιάζει τα αποτελέσματα της ανάλυσης συναισθήματος και τη συγκριτική αξιολόγηση των δύο μοντέλων BERT και RoBERTa.
+
+\subsection{Αρχική Σύγκριση Μοντέλων}
+\label{sec:Αρχική Σύγκριση Μοντέλων}
+
+Μετά την εφαρμογή των μοντέλων στα 108.687 σχόλια, πραγματοποιήθηκε αρχική σύγκριση των αποτελεσμάτων. Το Σχήμα \ref{fig:11} και ο Πίνακας \ref{tab:top5_emotions} παρουσιάζουν τα 5 συχνότερα συναισθήματα για κάθε μοντέλο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.30\textwidth]{11.png}
+    \caption{Σύγκριση των 5 συχνότερων συναισθημάτων μεταξύ RoBERTa και BERT.}
+    \label{fig:11}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Συχνότητα των 5 κυρίαρχων συναισθημάτων ανά μοντέλο}
+    \label{tab:top5_emotions}
+    \begin{tabular}{@{}lrr@{}}
+        \toprule
+        \textbf{Συναίσθημα} & \textbf{RoBERTa} & \textbf{BERT} \\
+        \midrule
+        neutral & 60.841 & 61.655 \\
+        gratitude & 13.119 & 12.814 \\
+        curiosity & 11.305 & 10.014 \\
+        confusion & 7.140 & 7.272 \\
+        approval & 5.215 & 4.486 \\
+        \midrule
+        \textbf{Σύνολο Top 5} & \textbf{97.620} & \textbf{96.241} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Παρατηρείται ότι και τα δύο μοντέλα αναγνωρίζουν τα ίδια 5 κυρίαρχα συναισθήματα (neutral, gratitude, curiosity, confusion, approval), αν και με διαφορετικές συχνότητες. Το συναίσθημα "neutral" κυριαρχεί και στα δύο μοντέλα με περίπου 60.000 εμφανίσεις.
+
+% ============================================================
+\subsection{Συγχώνευση Δεδομένων}
+\label{sec:Συγχώνευση Δεδομένων}
+
+Για την ολοκληρωμένη ανάλυση, τα δεδομένα συναισθημάτων συγχωνεύτηκαν με τις πληροφορίες χρηστών και δημοσιεύσεων. Ο Κώδικας \ref{lst:merge_data} παρουσιάζει τη διαδικασία συγχώνευσης.
+\newpage
+
+\begin{lstlisting}[language=Python, caption={Συγχώνευση δεδομένων}, label={lst:merge_data}]
+# LOAD & MERGE ALL DATA 
+comments = pd.read_csv("comments_with_emotions.csv")
+users = pd.read_csv("users.csv")
+posts = pd.read_csv("posts_answers.csv")
+
+# Parse dictionary columns
+def safe_parse(x):
+    if pd.isna(x):
+        return {}
+    if isinstance(x, dict):
+        return x
+    try:
+        return ast.literal_eval(x)
+    except:
+        return {}
+
+comments["roberta_all_emotions"] = comments["roberta_all_emotions"].apply(safe_parse)
+comments["bert_all_emotions"] = comments["bert_all_emotions"].apply(safe_parse)
+
+# Merge with users (INCLUDING LOCATION)
+df = comments.merge(
+    users[["id", "location", "reputation", "up_votes", "down_votes"]],
+    left_on="user_id",
+    right_on="id",
+    how="left",
+    suffixes=('', '_user')
+)
+
+# Merge with posts
+df = df.merge(
+    posts[["id", "score", "comment_count", "favorite_count"]],
+    left_on="post_id",
+    right_on="id",
+    how="left",
+    suffixes=('', '_post')
+)
+
+print(f"Loaded {len(comments)} comments")
+print(f"Merged dataset shape: {df.shape}")
+\end{lstlisting}
+
+Το τελικό συγχωνευμένο dataset περιλαμβάνει 108.687 εγγραφές με 23 πεδία, συνδυάζοντας τα συναισθήματα με τα χαρακτηριστικά χρηστών και δημοσιεύσεων.
+
+% ============================================================
+\subsection{Αντιστοίχιση Συναισθημάτων σε Κατηγορίες (Sentiment Mapping)}
+\label{sec:Sentiment Mapping}
+
+Τα 28 συναισθήματα του GoEmotions ομαδοποιήθηκαν σε τρεις κατηγορίες sentiment για υψηλότερου επιπέδου ανάλυση:
+
+\begin{itemize}
+    \item \textbf{Positive (12):} admiration, amusement, approval, caring, desire, excitement, gratitude, joy, love, optimism, pride, relief
+    \item \textbf{Negative (11):} anger, annoyance, disappointment, disapproval, disgust, embarrassment, fear, grief, nervousness, remorse, sadness
+    \item \textbf{Neutral (5):} confusion, curiosity, neutral, realization, surprise
+\end{itemize}
+
+Το Σχήμα \ref{fig:12} και ο Πίνακας \ref{tab:sentiment_distribution} παρουσιάζουν την κατανομή sentiment για κάθε μοντέλο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{12.png}
+    \caption{Κατανομή sentiment για RoBERTa και BERT μετά την ομαδοποίηση συναισθημάτων.}
+    \label{fig:12}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Κατανομή sentiment ανά μοντέλο}
+    \label{tab:sentiment_distribution}
+    \begin{tabular}{@{}lrrrr@{}}
+        \toprule
+        \textbf{Sentiment} & \textbf{RoBERTa} & \textbf{\%} & \textbf{BERT} & \textbf{\%} \\
+        \midrule
+        neutral & 80.144 & 73,7\% & 80.427 & 74,0\% \\
+        positive & 22.106 & 20,3\% & 22.010 & 20,3\% \\
+        negative & 6.437 & 5,9\% & 6.250 & 5,8\% \\
+        \midrule
+        \textbf{Σύνολο} & \textbf{108.687} & \textbf{100\%} & \textbf{108.687} & \textbf{100\%} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Ανάλυση Συμφωνίας Μοντέλων}
+\label{sec:Ανάλυση Συμφωνίας Μοντέλων}
+
+Για την αξιολόγηση της συνέπειας μεταξύ των δύο μοντέλων, υπολογίστηκε το ποσοστό συμφωνίας τόσο σε επίπεδο ακριβούς συναισθήματος όσο και σε επίπεδο sentiment.
+
+\begin{lstlisting}[language=Python, caption={Ανάλυση συμφωνίας μοντέλων}, label={lst:agreement}]
+# MODEL AGREEMENT ANALYSIS
+
+# Exact emotion agreement
+emotion_agreement = (comments["roberta_top_emotion"] == comments["bert_top_emotion"]).mean()
+print(f"Exact Emotion Agreement: {emotion_agreement:.2%}")
+
+# Sentiment agreement (positive/negative/neutral)
+sentiment_agreement = (comments["roberta_sentiment"] == comments["bert_sentiment"]).mean()
+print(f"Sentiment Agreement: {sentiment_agreement:.2%}")
+
+# Create agreement columns
+comments["models_agree_emotion"] = comments["roberta_top_emotion"] == comments["bert_top_emotion"]
+comments["models_agree_sentiment"] = comments["roberta_sentiment"] == comments["bert_sentiment"]
+
+# Where do they disagree?
+disagreements = comments[~comments["models_agree_emotion"]]
+print(f"Number of disagreements: {len(disagreements)} ({len(disagreements)/len(comments)*100:.1f}%)")
+\end{lstlisting}
+
+Ο Πίνακας \ref{tab:agreement_results} παρουσιάζει τα αποτελέσματα της ανάλυσης συμφωνίας.
+
+\begin{table}[H]
+\centering
+\caption{Αποτελέσματα ανάλυσης συμφωνίας μεταξύ BERT και RoBERTa}
+\label{tab:agreement_results}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+Ακριβής Συμφωνία Συναισθήματος (Exact Emotion Agreement) & 78,45\% \\
+Συμφωνία Sentiment (Sentiment Agreement) & 90,40\% \\
+Αριθμός διαφωνιών (σε επίπεδο συναισθήματος) & 23.425 (21,6\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Τα αποτελέσματα δείχνουν ότι:
+\begin{itemize}
+    \item Τα δύο μοντέλα συμφωνούν στο \textbf{78,45\%} των περιπτώσεων όταν εξετάζεται το ακριβές συναίσθημα (28 κατηγορίες).
+    \item Η συμφωνία αυξάνεται στο \textbf{90,40\%} όταν εξετάζεται το sentiment (3 κατηγορίες).
+    \item Οι διαφωνίες (21,6\%) εντοπίζονται κυρίως σε λεπτές διακρίσεις μεταξύ παρόμοιων συναισθημάτων εντός της ίδιας κατηγορίας sentiment.
+\end{itemize}
+
+
+Το Σχήμα \ref{fig:13} παρουσιάζει δείγμα περιπτώσεων όπου τα δύο μοντέλα διαφωνούν. Παρατηρείται ότι οι περισσότερες διαφωνίες αφορούν λεπτές αποχρώσεις συναισθημάτων (π.χ. neutral vs confusion, admiration vs approval), ενώ το sentiment παραμένει συχνά το ίδιο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{13.png}
+    \caption{Δείγμα διαφωνιών μεταξύ BERT και RoBERTa. Οι περισσότερες διαφωνίες αφορούν παρόμοια συναισθήματα εντός της ίδιας κατηγορίας sentiment.}
+    \label{fig:13}
+\end{figure}
+
+Από το δείγμα διαφωνιών προκύπτουν τα εξής συμπεράσματα:
+\begin{itemize}
+    \item Το RoBERTa τείνει να ταξινομεί περισσότερα σχόλια ως "neutral", ενώ το BERT διακρίνει πιο συγκεκριμένα συναισθήματα (confusion, realization, approval).
+    \item Σε ορισμένες περιπτώσεις (γραμμές 9, 33), τα μοντέλα διαφωνούν και στο sentiment (neutral vs positive).
+    \item Κείμενα με αμφίσημο ή τεχνικό περιεχόμενο παρουσιάζουν μεγαλύτερη πιθανότητα διαφωνίας.
+\end{itemize}
+
+
+% ============================================================
+\subsection{Κατανομή Συναισθημάτων}
+\label{sec:Κατανομή Συναισθημάτων}
+
+Η παρούσα υποενότητα παρουσιάζει την αναλυτική κατανομή των 28 συναισθημάτων όπως ταξινομήθηκαν από τα δύο μοντέλα.
+
+\subsubsection{Σύγκριση Κατανομής Συναισθημάτων}
+\label{sec:Σύγκριση Κατανομής Συναισθημάτων}
+
+Ο Πίνακας \ref{tab:emotion_distribution} παρουσιάζει την πλήρη κατανομή των 28 συναισθημάτων για τα δύο μοντέλα, καθώς και τη διαφορά μεταξύ τους.
+
+\begin{table}[H]
+\centering
+\caption{Κατανομή συναισθημάτων: Σύγκριση RoBERTa και BERT}
+\label{tab:emotion_distribution}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Συναίσθημα} & \textbf{RoBERTa} & \textbf{BERT} & \textbf{Διαφορά} \\
+\midrule
+neutral & 60.841 & 61.655 & -814 \\
+gratitude & 13.119 & 12.814 & +305 \\
+curiosity & 11.305 & 10.014 & +1.291 \\
+confusion & 7.140 & 7.272 & -132 \\
+approval & 5.215 & 4.486 & +729 \\
+disapproval & 2.681 & 2.259 & +422 \\
+remorse & 1.929 & 1.535 & +394 \\
+admiration & 1.258 & 1.797 & -539 \\
+disappointment & 1.138 & 1.159 & -21 \\
+optimism & 772 & 1.314 & -542 \\
+caring & 572 & 618 & -46 \\
+realization & 565 & 989 & -424 \\
+joy & 403 & 297 & +106 \\
+annoyance & 324 & 783 & -459 \\
+amusement & 312 & 273 & +39 \\
+desire & 307 & 196 & +111 \\
+surprise & 293 & 497 & -204 \\
+sadness & 138 & 144 & -6 \\
+fear & 133 & 182 & -49 \\
+love & 105 & 101 & +4 \\
+excitement & 43 & 82 & -39 \\
+disgust & 39 & 65 & -26 \\
+embarrassment & 26 & 78 & -52 \\
+anger & 17 & 33 & -16 \\
+nervousness & 12 & 12 & 0 \\
+pride & 0 & 2 & -2 \\
+relief & 0 & 30 & -30 \\
+\midrule
+\textbf{Σύνολο} & \textbf{108.687} & \textbf{108.687}  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Από τον πίνακα προκύπτουν τα εξής συμπεράσματα:
+\begin{itemize}
+    \item Το \textbf{neutral} κυριαρχεί και στα δύο μοντέλα (~56\% των σχολίων).
+    \item Το RoBERTa ανιχνεύει περισσότερα \textbf{curiosity} (+1.291) και \textbf{approval} (+729).
+    \item Το BERT ανιχνεύει περισσότερα \textbf{admiration} (+539), \textbf{optimism} (+542) και \textbf{annoyance} (+459).
+    \item Ορισμένα συναισθήματα (pride, relief) σχεδόν δεν ανιχνεύονται από το RoBERTa.
+\end{itemize}
+
+\subsubsection{Οπτική Σύγκριση Κορυφαίων Συναισθημάτων}
+\label{sec:Οπτική Σύγκριση Κορυφαίων Συναισθημάτων}
+
+Το Σχήμα \ref{fig:14} παρουσιάζει οπτικά τη σύγκριση των 15 συχνότερων συναισθημάτων μεταξύ των δύο μοντέλων.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{14.png}
+    \caption{Σύγκριση των 15 συχνότερων συναισθημάτων μεταξύ RoBERTa (μπλε) και BERT (πορτοκαλί). Το neutral κυριαρχεί με περίπου 60.000 εμφανίσεις.}
+    \label{fig:14}
+\end{figure}
+
+Η οπτική σύγκριση αναδεικνύει ότι:
+\begin{itemize}
+    \item Τα δύο μοντέλα παρουσιάζουν παρόμοια ιεράρχηση συναισθημάτων.
+    \item Οι μεγαλύτερες αποκλίσεις εντοπίζονται στα συναισθήματα curiosity, admiration και annoyance.
+    \item Τα σπάνια συναισθήματα (anger, nervousness, pride) έχουν πολύ χαμηλή συχνότητα και στα δύο μοντέλα.
+\end{itemize}
+\newpage
+
+% ============================================================
+\subsection{Κατανομή Sentiment}
+\label{sec:Κατανομή Sentiment}
+
+Μετά την ομαδοποίηση των 28 συναισθημάτων σε τρεις κατηγορίες sentiment (positive, negative, neutral), εξετάστηκε η συνολική κατανομή για κάθε μοντέλο.
+
+Το Σχήμα \ref{fig:15} παρουσιάζει τη σύγκριση της κατανομής sentiment μεταξύ RoBERTa και BERT, τόσο σε μορφή pie chart όσο και σε μορφή bar chart.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{15.png}
+    \caption{Κατανομή Sentiment για RoBERTa και BERT. Άνω: Pie charts με ποσοστά. Κάτω: Bar chart με απόλυτες τιμές.}
+    \label{fig:15}
+\end{figure}
+
+Ο Πίνακας \ref{tab:sentiment_summary} συνοψίζει την κατανομή sentiment.
+
+\begin{table}[H]
+\centering
+\caption{Συγκριτική κατανομή Sentiment}
+\label{tab:sentiment_summary}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Sentiment} & \textbf{RoBERTa} & \textbf{RoBERTa (\%)} & \textbf{BERT} & \textbf{BERT (\%)} \\
+\midrule
+Neutral & 80.144 & 73,7\% & 80.427 & 74,0\% \\
+Positive & 22.106 & 20,3\% & 22.010 & 20,3\% \\
+Negative & 6.437 & 5,9\% & 6.250 & 5,8\% \\
+\midrule
+\textbf{Σύνολο} & 108.687 & 100\% & 108.687 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Τα κύρια ευρήματα της ανάλυσης sentiment είναι:
+\begin{itemize}
+    \item \textbf{Εντυπωσιακή ομοιότητα:} Τα δύο μοντέλα παρουσιάζουν σχεδόν ταυτόσημες κατανομές sentiment, με διαφορές μικρότερες του 0,3\%.
+    \item \textbf{Κυριαρχία neutral:} Περίπου 74\% των σχολίων ταξινομούνται ως neutral, αντικατοπτρίζοντας τον τεχνικό και ενημερωτικό χαρακτήρα της πλατφόρμας Stack Overflow.
+    \item \textbf{Θετικότητα:} Το 20\% των σχολίων εκφράζει θετικό συναίσθημα, κυρίως μέσω ευγνωμοσύνης (gratitude) και έγκρισης (approval).
+    \item \textbf{Χαμηλή αρνητικότητα:} Μόνο ~6\% των σχολίων είναι αρνητικά, υποδεικνύοντας μια σχετικά θετική κοινότητα.
+\end{itemize}
+
+
+
+
+
+
+\newpage
+
+
+% ============================================================
+\subsection{Confusion Matrix Μεταξύ Μοντέλων}
+\label{sec:Confusion Matrix Μεταξύ Μοντέλων}
+
+Για την αναλυτική κατανόηση των διαφωνιών μεταξύ των δύο μοντέλων, δημιουργήθηκε confusion matrix σε επίπεδο sentiment. Το Σχήμα \ref{fig:16} παρουσιάζει τον πίνακα σύγχυσης μεταξύ RoBERTa και BERT.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{16.png}
+    \caption{Confusion Matrix μεταξύ RoBERTa και BERT σε επίπεδο Sentiment. Οι διαγώνιοι αριθμοί αντιπροσωπεύουν τη συμφωνία μεταξύ των μοντέλων.}
+    \label{fig:16}
+\end{figure}
+
+Ο Πίνακας \ref{tab:confusion_analysis} αναλύει τα αποτελέσματα του confusion matrix.
+
+\begin{table}[H]
+\centering
+\caption{Ανάλυση Confusion Matrix: Συμφωνίες και Διαφωνίες}
+\label{tab:confusion_analysis}
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{RoBERTa} & \textbf{BERT} & \textbf{Πλήθος} \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\textit{Συμφωνίες (Διαγώνιος):}} \\
+Positive & Positive & 18.808 \\
+Negative & Negative & 4.126 \\
+Neutral & Neutral & 75.315 \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Σύνολο Συμφωνιών}} & \textbf{98.249 (90,4\%)} \\
+\midrule
+\multicolumn{3}{@{}l@{}}{\textit{Κύριες Διαφωνίες:}} \\
+Positive & Neutral & 3.082 \\
+Neutral & Positive & 2.921 \\
+Negative & Neutral & 2.030 \\
+Neutral & Negative & 1.908 \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Σύνολο Διαφωνιών}} & \textbf{10.438 (9,6\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Από τον confusion matrix προκύπτουν τα εξής:
+\begin{itemize}
+    \item Η μεγαλύτερη συμφωνία εντοπίζεται στην κατηγορία \textbf{neutral} (75.315 σχόλια), όπου και τα δύο μοντέλα συμφωνούν στην πλειονότητα των περιπτώσεων.
+    \item Οι κύριες διαφωνίες αφορούν τη διάκριση μεταξύ \textbf{neutral} και \textbf{positive} sentiment (~6.000 περιπτώσεις συνολικά).
+    \item Η διαφωνία μεταξύ \textbf{positive} και \textbf{negative} είναι ελάχιστη (216 + 281 = 497 περιπτώσεις), υποδεικνύοντας ότι τα μοντέλα διακρίνουν σαφώς τα αντίθετα συναισθήματα.
+\end{itemize}
+
+% ============================================================
+\subsection{Συσχέτιση Συναισθήματος με Βαθμολογία Σχολίου}
+\label{sec:Συσχέτιση Συναισθήματος με Βαθμολογία Σχολίου}
+
+Εξετάστηκε η σχέση μεταξύ του αναγνωρισμένου συναισθήματος και της βαθμολογίας (upvotes) που λαμβάνει το σχόλιο από την κοινότητα. Το Σχήμα \ref{fig:17} παρουσιάζει τη μέση βαθμολογία σχολίων ανά συναίσθημα για κάθε μοντέλο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{17.png}
+    \caption{Μέση βαθμολογία σχολίων ανά συναίσθημα για RoBERTa (αριστερά) και BERT (δεξιά).}
+    \label{fig:17}
+\end{figure}
+
+Από την ανάλυση προκύπτουν τα εξής ευρήματα:
+\begin{itemize}
+    \item Το συναίσθημα \textbf{embarrassment} σχετίζεται με τις υψηλότερες βαθμολογίες και στα δύο μοντέλα, πιθανώς λόγω του χιουμοριστικού χαρακτήρα τέτοιων σχολίων.
+    \item Τα αρνητικά συναισθήματα (\textbf{disapproval}, \textbf{anger}, \textbf{annoyance}) τείνουν να έχουν υψηλότερες βαθμολογίες σε σχέση με τα neutral.
+    \item Τα θετικά συναισθήματα όπως \textbf{gratitude} και \textbf{admiration} παρουσιάζουν χαμηλότερες μέσες βαθμολογίες, καθώς συνήθως αποτελούν απλές ευχαριστίες.
+    \item Το BERT παρουσιάζει μεγαλύτερη διακύμανση στις μέσες βαθμολογίες, ιδιαίτερα για τα συναισθήματα annoyance και sadness.
+\end{itemize}
+
+% ============================================================
+\subsection{Συνοπτικά Στατιστικά Ανάλυσης}
+\label{sec:Συνοπτικά Στατιστικά Ανάλυσης}
+
+Μετά την ολοκλήρωση της ανάλυσης, τα επεξεργασμένα δεδομένα αποθηκεύτηκαν για περαιτέρω χρήση. Ο Πίνακας \ref{tab:18} συνοψίζει τα κύρια στατιστικά της ανάλυσης.
+
+\begin{table}[H]
+\centering
+\caption{Συνοπτικά στατιστικά ανάλυσης συναισθήματος}
+\label{tab:18}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+Συνολικά σχόλια που αναλύθηκαν & 108.687 \\
+Ποσοστό συμφωνίας συναισθήματος (Emotion Agreement) & 78,45\% \\
+Ποσοστό συμφωνίας sentiment (Sentiment Agreement) & 90,40\% \\
+Μέσο confidence score RoBERTa & 0,7528 \\
+Μέσο confidence score BERT & 0,9378 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Τα συνοπτικά στατιστικά αναδεικνύουν:
+\begin{itemize}
+    \item \textbf{Υψηλή συμφωνία:} Τα δύο μοντέλα συμφωνούν στο 90,4\% των περιπτώσεων σε επίπεδο sentiment, υποδεικνύοντας αξιοπιστία στην ανάλυση.
+    \item \textbf{Διαφορά confidence:} Το BERT παρουσιάζει σημαντικά υψηλότερο μέσο confidence score (0,94 vs 0,75), υποδεικνύοντας πιθανή υπερβολική εμπιστοσύνη (overconfidence).
+    \item \textbf{Επαρκές δείγμα:} Τα 108.687 σχόλια παρέχουν στατιστικά σημαντικό δείγμα για αξιόπιστα συμπεράσματα.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ============================================================
+\subsection{Cross tabulation Ταξινόμηση Συναισθημάτων}
+\label{sec:Cross tabulation Ταξινόμηση Συναισθημάτων}
+
+Για την αναλυτική κατανόηση των διαφωνιών σε επίπεδο συναισθήματος (και όχι μόνο sentiment), δημιουργήθηκε πίνακας διασταυρωμένης ταξινόμησης (cross-tabulation) μεταξύ των προβλέψεων των δύο μοντέλων.
+
+Το Σχήμα \ref{fig:19} παρουσιάζει τον πλήρη πίνακα διασταυρωμένης ταξινόμησης για όλα τα 28 συναισθήματα.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{19.png}
+    \caption{Διασταυρωμένη ταξινόμηση (Cross-Tabulation) μεταξύ BERT και RoBERTa. Οι διαγώνιες τιμές (υψηλότερες) αντιπροσωπεύουν τη συμφωνία μεταξύ των μοντέλων.}
+    \label{fig:19}
+\end{figure}
+
+Από τον πίνακα διασταυρωμένης ταξινόμησης προκύπτουν τα εξής συμπεράσματα:
+
+\begin{itemize}
+    \item \textbf{Υψηλή συμφωνία στο neutral:} Η μεγαλύτερη συμφωνία εντοπίζεται στο συναίσθημα neutral (52.562 σχόλια), το οποίο κυριαρχεί στο dataset.
+    
+    \item \textbf{Σύγχυση μεταξύ παρόμοιων συναισθημάτων:} Παρατηρείται σημαντική σύγχυση μεταξύ:
+    \begin{itemize}
+        \item curiosity $\leftrightarrow$ confusion (6.699 και 4.108 αντίστοιχα)
+        \item gratitude $\leftrightarrow$ approval (μερική επικάλυψη)
+        \item admiration $\leftrightarrow$ approval
+    \end{itemize}
+    
+    \item \textbf{Σπάνια συναισθήματα:} Τα συναισθήματα pride, relief και nervousness έχουν πολύ χαμηλή συχνότητα, καθιστώντας δύσκολη την αξιόπιστη σύγκριση.
+    
+    \item \textbf{Διαγώνια κυριαρχία:} Οι υψηλότερες τιμές εντοπίζονται στη διαγώνιο του πίνακα, επιβεβαιώνοντας τη συνολική συμφωνία (78,4\%) μεταξύ των μοντέλων.
+\end{itemize}
+
+% ============================================================
+\subsection{Οπτικοποίηση Συμφωνίας Μοντέλων}
+\label{sec:Οπτικοποίηση Συμφωνίας Μοντέλων}
+
+Το Σχήμα \ref{fig:20} παρουσιάζει οπτικά τα ποσοστά συμφωνίας και διαφωνίας μεταξύ των δύο μοντέλων, τόσο σε επίπεδο ακριβούς συναισθήματος όσο και σε επίπεδο sentiment.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{20.png}
+    \caption{Οπτικοποίηση συμφωνίας μεταξύ BERT και RoBERTa. Αριστερά: Συμφωνία σε επίπεδο ακριβούς συναισθήματος (78,4\%). Δεξιά: Συμφωνία σε επίπεδο sentiment (90,4\%).}
+    \label{fig:20}
+\end{figure}
+
+Η διαφορά μεταξύ των δύο τύπων συμφωνίας εξηγείται ως εξής:
+
+\begin{itemize}
+    \item \textbf{Emotion Agreement (78,4\%):} Αυστηρή σύγκριση — και τα δύο μοντέλα πρέπει να προβλέψουν ακριβώς το ίδιο συναίσθημα (π.χ. και τα δύο "joy").
+    
+    \item \textbf{Sentiment Agreement (90,4\%):} Χαλαρή σύγκριση — τα μοντέλα πρέπει να προβλέψουν την ίδια κατηγορία (positive, negative ή neutral).
+    
+    \item Η υψηλότερη συμφωνία sentiment είναι αναμενόμενη, καθώς πολλά συναισθήματα ανήκουν στην ίδια κατηγορία (π.χ. joy, love, excitement → όλα "positive").
+\end{itemize}
+
+% ============================================================
+\subsection{Συνοπτικός Πίνακας Αποτελεσμάτων}
+\label{sec:Συνοπτικός Πίνακας Αποτελεσμάτων}
+
+Ο Πίνακας \ref{tab:results_dashboard} συνοψίζει τα κύρια ευρήματα της συγκριτικής ανάλυσης μεταξύ BERT και RoBERTa.
+
+\begin{table}[H]
+\centering
+\caption{Συνοπτικός πίνακας αποτελεσμάτων ανάλυσης συναισθήματος}
+\label{tab:results_dashboard}
+\begin{tabular}{@{}p{4.5cm}p{9cm}@{}}
+\toprule
+\textbf{Κατηγορία} & \textbf{Ευρήματα} \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Dataset Overview}} \\
+\quad Σύνολο σχολίων & 108.687 \\
+\quad Μοναδικά συναισθήματα & 25 (από 28 διαθέσιμα) \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Model Agreement}} \\
+\quad Emotion Agreement & 78,4\% — Τα μοντέλα προβλέπουν το ίδιο ακριβές συναίσθημα \\
+\quad Sentiment Agreement & 90,4\% — Τα μοντέλα συμφωνούν στην κατηγορία (positive/negative/neutral) \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Confidence Scores}} \\
+\quad BERT μέσο confidence & 93,8\% \\
+\quad RoBERTa μέσο confidence & 75,3\% \\
+\midrule
+\multicolumn{2}{@{}l@{}}{\textbf{Interpretation}} \\
+\quad BERT & Υψηλότερο confidence, πιθανή υπερβολική εμπιστοσύνη (overconfidence) \\
+\quad RoBERTa & Χαμηλότερο confidence, καλύτερη βαθμονόμηση (calibration) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{21.png}
+    \caption{Συνοπτική επισκόπηση αποτελεσμάτων ανάλυσης συναισθήματος BERT vs RoBERTa.}
+    \label{fig:21}
+\end{figure}
+
+Τα κύρια συμπεράσματα της συγκριτικής ανάλυσης είναι:
+
+\begin{enumerate}
+    \item \textbf{Υψηλή συμφωνία:} Τα δύο μοντέλα συμφωνούν στην πλειονότητα των περιπτώσεων (78,4\% σε επίπεδο συναισθήματος, 90,4\% σε επίπεδο sentiment), υποδεικνύοντας αξιοπιστία στην ανάλυση.
+    
+    \item \textbf{Διαφορετική βαθμονόμηση:} Το BERT παρουσιάζει σημαντικά υψηλότερα confidence scores (93,8\% vs 75,3\%), γεγονός που υποδεικνύει πιθανή υπερβολική εμπιστοσύνη. Το RoBERTa φαίνεται να έχει καλύτερη βαθμονόμηση μεταξύ confidence και πραγματικής απόδοσης.
+    
+    \item \textbf{Συμπληρωματικότητα:} Οι διαφωνίες μεταξύ των μοντέλων εντοπίζονται κυρίως σε λεπτές διακρίσεις συναισθημάτων, υποδεικνύοντας ότι η χρήση και των δύο μοντέλων μπορεί να παρέχει πληρέστερη εικόνα.
+\end{enumerate}
+\newpage
+
+
+
+
+
+
+
+
+
+
+% ============================================================
+\subsection{Στατιστικοί Έλεγχοι}
+\label{sec:Στατιστικοί Έλεγχοι}
+
+Για την αξιολόγηση της στατιστικής σημαντικότητας των διαφορών μεταξύ των δύο μοντέλων, εφαρμόστηκαν διάφοροι στατιστικοί έλεγχοι.
+
+% ============================================================
+\subsubsection{Έλεγχος McNemar}
+\label{sec:Έλεγχος McNemar}
+
+Ο έλεγχος McNemar χρησιμοποιείται για τη σύγκριση δύο ταξινομητών στα ίδια δεδομένα, εξετάζοντας αν παρουσιάζουν συστηματικά διαφορετική συμπεριφορά. Ο έλεγχος εστιάζει στις περιπτώσεις διαφωνίας μεταξύ των μοντέλων.
+
+Ο στατιστικός τύπος του McNemar's test είναι:
+
+\begin{equation}
+\chi^2 = \frac{(b - c)^2}{b + c}
+\label{eq:mcnemar}
+\end{equation}
+
+όπου $b$ είναι ο αριθμός περιπτώσεων όπου το BERT είναι πιο σίγουρο και $c$ όπου το RoBERTa είναι πιο σίγουρο.
+
+Το Σχήμα \ref{fig:22} παρουσιάζει τα αποτελέσματα του ελέγχου McNemar.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{22.png}
+    \caption{Αποτελέσματα ελέγχου McNemar: Ανάλυση διαφωνιών μεταξύ BERT και RoBERTa.}
+    \label{fig:22}
+\end{figure}
+
+Ο Πίνακας \ref{tab:mcnemar_results} συνοψίζει τα αποτελέσματα του ελέγχου.
+
+\begin{table}[H]
+\centering
+\caption{Αποτελέσματα ελέγχου McNemar}
+\label{tab:mcnemar_results}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+Συμφωνία (Both Same) & 85.262 \\
+BERT More Confident & 20.068 \\
+RoBERTa More Confident & 3.357 \\
+\midrule
+McNemar Statistic ($\chi^2$) & 11.919,92 \\
+p-value &  0,0001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Ερμηνεία αποτελεσμάτων:}
+\begin{itemize}
+    \item Το \textbf{p-value $<$ 0,05} υποδεικνύει ότι τα μοντέλα παρουσιάζουν \textbf{στατιστικά σημαντική διαφορά} στη συμπεριφορά τους.
+    \item Όταν τα μοντέλα διαφωνούν, το BERT είναι πιο σίγουρο σε \textbf{20.068} περιπτώσεις έναντι \textbf{3.357} του RoBERTa (αναλογία ~6:1).
+    \item Αυτό επιβεβαιώνει την τάση του BERT για υπερβολική εμπιστοσύνη (overconfidence) στις προβλέψεις του.
+\end{itemize}
+
+% ============================================================
+\subsubsection{Ανάλυση Συσχετίσεων (Pearson Correlation)}
+\label{sec:Ανάλυση Συσχετίσεων}
+
+Εξετάστηκε η συσχέτιση μεταξύ των confidence scores των μοντέλων και της βαθμολογίας των σχολίων, καθώς και η συσχέτιση μεταξύ των confidence scores των δύο μοντέλων.
+
+Το Σχήμα \ref{fig:23} παρουσιάζει τα αποτελέσματα της ανάλυσης συσχετίσεων.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{23.png}
+    \caption{Ανάλυση συσχετίσεων Pearson μεταξύ confidence scores και βαθμολογίας σχολίων.}
+    \label{fig:23}
+\end{figure}
+
+Ο Πίνακας \ref{tab:correlation_results} συνοψίζει τα αποτελέσματα της ανάλυσης συσχετίσεων.
+
+\begin{table}[H]
+\centering
+\caption{Αποτελέσματα ανάλυσης συσχετίσεων Pearson}
+\label{tab:correlation_results}
+\begin{tabular}{@{}lrrp{4cm}@{}}
+\toprule
+\textbf{Συσχέτιση} & \textbf{r} & \textbf{p-value} & \textbf{Ερμηνεία} \\
+\midrule
+RoBERTa Conf. vs Score & 0,003 & 0,3245 & Αμελητέα (μη σημαντική) \\
+BERT Conf. vs Score & 0,000 & 0,8940 & Αμελητέα (μη σημαντική) \\
+BERT vs RoBERTa Conf. & 0,366 &  0,0001 & Μέτρια θετική (σημαντική) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Κλίμακα ερμηνείας συσχέτισης:}
+\begin{itemize}
+    \item $|r| < 0,1$: Αμελητέα συσχέτιση
+    \item $0,1 \leq |r| < 0,3$: Ασθενής συσχέτιση
+    \item $0,3 \leq |r| < 0,5$: Μέτρια συσχέτιση
+    \item $0,5 \leq |r| < 0,7$: Ισχυρή συσχέτιση
+    \item $|r| \geq 0,7$: Πολύ ισχυρή συσχέτιση
+\end{itemize}
+
+\textbf{Ερμηνεία αποτελεσμάτων:}
+\begin{itemize}
+    \item \textbf{Confidence vs Score ≈ 0:} Η εμπιστοσύνη των μοντέλων δεν σχετίζεται με τη δημοτικότητα του σχολίου. Αυτό είναι αναμενόμενο, καθώς η βαθμολογία εξαρτάται από το περιεχόμενο και όχι από τη σαφήνεια του συναισθήματος.
+    \item \textbf{BERT vs RoBERTa Conf. = 0,366:} Υπάρχει μέτρια θετική συσχέτιση μεταξύ των confidence scores, υποδεικνύοντας ότι όταν ένα μοντέλο είναι σίγουρο, τείνει να είναι και το άλλο. Ωστόσο, η συσχέτιση δεν είναι ισχυρή, επιβεβαιώνοντας τις διαφορές στη βαθμονόμηση.
+\end{itemize}
+
+% ============================================================
+\subsubsection{Σύγκριση Confidence Scores}
+\label{sec:Σύγκριση Confidence Scores}
+
+Πραγματοποιήθηκε αναλυτική σύγκριση των κατανομών confidence scores μεταξύ των δύο μοντέλων, χρησιμοποιώντας περιγραφικά στατιστικά και t-test για ανεξάρτητα δείγματα.
+
+Το Σχήμα \ref{fig:24} παρουσιάζει τις κατανομές confidence scores.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{24.png}
+    \caption{Σύγκριση κατανομών confidence scores μεταξύ RoBERTa και BERT. Αριστερά: Histogram με μέσους όρους. Δεξιά: Box plot.}
+    \label{fig:24}
+\end{figure}
+
+Ο Πίνακας \ref{tab:confidence_stats} παρουσιάζει τα περιγραφικά στατιστικά των confidence scores.
+
+\begin{table}[H]
+\centering
+\caption{Περιγραφικά στατιστικά confidence scores}
+\label{tab:confidence_stats}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Στατιστικό} & \textbf{RoBERTa} & \textbf{BERT} \\
+\midrule
+Mean & 0,7528 & 0,9378 \\
+Std Dev & 0,1818 & 0,1284 \\
+Median & 0,7787 & 0,9988 \\
+Min & 0,1312 & 0,1671 \\
+Max & 0,9953 & 1,0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Αποτελέσματα t-test:}
+\begin{itemize}
+    \item t-statistic: 274,12
+    \item p-value:  0,0001
+\end{itemize}
+
+Το εξαιρετικά χαμηλό p-value επιβεβαιώνει ότι η διαφορά στα confidence scores μεταξύ των δύο μοντέλων είναι \textbf{στατιστικά σημαντική}.
+
+\textbf{Κύρια ευρήματα:}
+\begin{itemize}
+    \item \textbf{BERT:} Μέσο confidence 93,8\%, με διάμεσο 99,88\%. Το 50\% των προβλέψεων έχει confidence ανω του 99,9\%, υποδεικνύοντας έντονη υπερβολική εμπιστοσύνη (overconfidence).
+    
+    \item \textbf{RoBERTa:} Μέσο confidence 75,3\%, με μεγαλύτερη διακύμανση (std = 0,18). Η κατανομή είναι πιο "απλωμένη", υποδεικνύοντας καλύτερη βαθμονόμηση.
+    
+    \item \textbf{Ερμηνεία:} Ένα καλά βαθμονομημένο μοντέλο θα πρέπει να έχει confidence που αντιστοιχεί στην πραγματική ακρίβεια. Το BERT φαίνεται να είναι "υπερβολικά σίγουρο" ακόμα και σε αμφίβολες περιπτώσεις, ενώ το RoBERTa παρουσιάζει πιο ρεαλιστικές εκτιμήσεις εμπιστοσύνης.
+\end{itemize}
+
+
+
+
+
+
+
+
+% ============================================================
+\subsubsection{Cohen's Kappa: Συμφωνία Μεταξύ Μοντέλων}
+\label{sec:Cohen's Kappa}
+
+Ο συντελεστής Cohen's Kappa αποτελεί μια ευρέως χρησιμοποιούμενη μετρική για την αξιολόγηση της συμφωνίας μεταξύ δύο ταξινομητών, λαμβάνοντας υπόψη τη συμφωνία που θα προέκυπτε τυχαία. Ο τύπος υπολογισμού είναι:
+
+\begin{equation}
+\kappa = \frac{p_o - p_e}{1 - p_e}
+\label{eq:kappa}
+\end{equation}
+
+όπου $p_o$ είναι η παρατηρούμενη συμφωνία και $p_e$ είναι η αναμενόμενη τυχαία συμφωνία.
+
+Ο Πίνακας \ref{tab:kappa_interpretation} παρουσιάζει την κλίμακα ερμηνείας του Cohen's Kappa.
+
+\begin{table}[H]
+\centering
+\caption{Κλίμακα ερμηνείας Cohen's Kappa}
+\label{tab:kappa_interpretation}
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Τιμή κ} & \textbf{Ερμηνεία} \\
+\midrule
+$\kappa < 0,20$ & Ασθενής συμφωνία (Poor agreement) \\
+$0,21 \leq \kappa \leq 0,40$ & Μέτρια συμφωνία (Fair agreement) \\
+$0,41 \leq \kappa \leq 0,60$ & Μέτρια προς καλή συμφωνία (Moderate agreement) \\
+$0,61 \leq \kappa \leq 0,80$ & Ουσιαστική συμφωνία (Substantial agreement) \\
+$\kappa > 0,80$ & Σχεδόν τέλεια συμφωνία (Almost perfect agreement) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Αποτέλεσμα:}
+
+\begin{table}[H]
+\centering
+\caption{Αποτέλεσμα Cohen's Kappa μεταξύ BERT και RoBERTa}
+\label{tab:kappa_result}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{Τιμή} \\
+\midrule
+Cohen's Kappa ($\kappa$) & 0,669 \\
+Κατηγορία & Ουσιαστική συμφωνία (Substantial agreement) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Ερμηνεία αποτελέσματος:}
+\begin{itemize}
+    \item Η τιμή $\kappa = 0,669$ εμπίπτει στην κατηγορία \textbf{"Substantial agreement"} (ουσιαστική συμφωνία), υποδεικνύοντας ότι τα δύο μοντέλα παρουσιάζουν υψηλό βαθμό συνέπειας στις προβλέψεις τους.
+    
+    \item Η τιμή αυτή είναι σημαντικά υψηλότερη από την τυχαία συμφωνία, επιβεβαιώνοντας ότι και τα δύο μοντέλα αναγνωρίζουν παρόμοια patterns στα δεδομένα.
+    
+    \item Η συμφωνία δεν είναι "σχεδόν τέλεια" ($\kappa > 0,80$), γεγονός που αντικατοπτρίζει τις διαφορές στη βαθμονόμηση και τις λεπτές διακρίσεις συναισθημάτων μεταξύ των μοντέλων.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ============================================================
+\subsection{Πρόσθετες Οπτικοποιήσεις}
+\label{sec:Πρόσθετες Οπτικοποιήσεις}
+
+Η παρούσα υποενότητα παρουσιάζει πρόσθετες οπτικοποιήσεις για την εμβάθυνση στη σχέση μεταξύ των δύο μοντέλων και την ανάλυση των διαφωνιών τους.
+
+% ============================================================
+\subsubsection{Scatter Plot: Σύγκριση Confidence Scores}
+\label{sec:Scatter Plot Confidence}
+
+Το Σχήμα \ref{fig:27} παρουσιάζει τη σχέση μεταξύ των confidence scores των δύο μοντέλων για κάθε σχόλιο, με χρωματική διάκριση ανάλογα με το αν τα μοντέλα συμφωνούν ή διαφωνούν.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{27.png}
+    \caption{Scatter plot σύγκρισης confidence scores μεταξύ BERT (άξονας x) και RoBERTa (άξονας y). Πράσινα σημεία: διαφωνία, Κόκκινα σημεία: συμφωνία.}
+    \label{fig:27}
+\end{figure}
+
+Από το scatter plot προκύπτουν τα εξής συμπεράσματα:
+
+\begin{itemize}
+    \item \textbf{Συγκέντρωση BERT στο 1.0:} Τα σημεία συγκεντρώνονται στη δεξιά πλευρά του γραφήματος (BERT confidence κοντά στο 1.0), επιβεβαιώνοντας την υπερβολική εμπιστοσύνη του BERT.
+    
+    \item \textbf{Διασπορά RoBERTa:} Το RoBERTa παρουσιάζει μεγαλύτερη διασπορά στα confidence scores (από 0.2 έως 1.0), υποδεικνύοντας καλύτερη βαθμονόμηση.
+    
+    \item \textbf{Διαφωνίες σε χαμηλά confidence:} Οι διαφωνίες (πράσινα σημεία) τείνουν να εμφανίζονται συχνότερα όταν το RoBERTa έχει χαμηλότερο confidence, υποδεικνύοντας αμφιβολία του μοντέλου.
+    
+    \item \textbf{Συμφωνία σε υψηλά confidence:} Όταν και τα δύο μοντέλα έχουν υψηλό confidence (πάνω δεξιά γωνία), τείνουν να συμφωνούν.
+\end{itemize}
+
+% ============================================================
+\subsubsection{Ανάλυση Διαφωνιών: Ποια Συναισθήματα Προκαλούν Σύγχυση}
+\label{sec:Ανάλυση Διαφωνιών}
+
+Εξετάστηκε σε ποια συναισθήματα εντοπίζονται οι περισσότερες διαφωνίες μεταξύ των μοντέλων. Το Σχήμα \ref{fig:28} παρουσιάζει τα 10 συναισθήματα με τις περισσότερες διαφωνίες.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{28.png}
+    \caption{Τα 10 συναισθήματα (κατά RoBERTa) με τις περισσότερες διαφωνίες μεταξύ των μοντέλων. Συνολικές διαφωνίες: 23.425 (21,6\%).}
+    \label{fig:28}
+\end{figure}
+
+Ο Πίνακας \ref{tab:disagreement_emotions} συνοψίζει τα συναισθήματα με τις περισσότερες διαφωνίες.
+
+\begin{table}[H]
+\centering
+\caption{Top 10 συναισθήματα με τις περισσότερες διαφωνίες}
+\label{tab:disagreement_emotions}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Συναίσθημα (RoBERTa)} & \textbf{Διαφωνίες} & \textbf{Ποσοστό Διαφωνιών} \\
+\midrule
+neutral & 8.279 & 35,4\% \\
+curiosity & 4.606 & 19,7\% \\
+confusion & 3.032 & 12,9\% \\
+approval & 2.578 & 11,0\% \\
+disapproval & 1.501 & 6,4\% \\
+disappointment & 624 & 2,7\% \\
+gratitude & 621 & 2,7\% \\
+remorse & 420 & 1,8\% \\
+caring & 309 & 1,3\% \\
+realization & 242 & 1,0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Κύρια ευρήματα:}
+\begin{itemize}
+    \item Το \textbf{neutral} παρουσιάζει τις περισσότερες διαφωνίες (8.279), καθώς αποτελεί το συχνότερο συναίσθημα και συχνά συγχέεται με ουδέτερα-αμφίσημα συναισθήματα.
+    
+    \item Τα \textbf{curiosity} και \textbf{confusion} (4.606 και 3.032 διαφωνίες αντίστοιχα) είναι σημασιολογικά κοντά, εξηγώντας τη συχνή σύγχυση.
+    
+    \item Το \textbf{approval} (2.578 διαφωνίες) συχνά συγχέεται με admiration ή gratitude.
+\end{itemize}
+
+% ============================================================
+\subsection{Γεωγραφική Ανάλυση Συναισθημάτων}
+\label{sec:Γεωγραφική Ανάλυση Συναισθημάτων}
+
+Εξετάστηκε η κατανομή των συναισθημάτων σε σχέση με τη γεωγραφική τοποθεσία των χρηστών.
+
+\subsubsection{Κατανομή Τοποθεσιών Χρηστών}
+\label{sec:Κατανομή Τοποθεσιών Χρηστών}
+
+Το Σχήμα \ref{fig:29} παρουσιάζει τις 10 συχνότερες τοποθεσίες χρηστών βάσει αριθμού σχολίων.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{29.png}
+    \caption{Top 10 τοποθεσίες χρηστών βάσει αριθμού σχολίων.}
+    \label{fig:29}
+\end{figure}
+
+Ο Πίνακας \ref{tab:top_locations} συνοψίζει τις κορυφαίες τοποθεσίες.
+
+\begin{table}[H]
+\centering
+\caption{Top 10 τοποθεσίες χρηστών}
+\label{tab:top_locations}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Τοποθεσία} & \textbf{Αριθμός Σχολίων} \\
+\midrule
+India & 1.539 \\
+United States & 1.510 \\
+Germany & 1.485 \\
+London, United Kingdom & 1.410 \\
+United Kingdom & 1.286 \\
+Netherlands & 851 \\
+Bangalore, India & 777 \\
+Israel & 679 \\
+Berlin, Germany & 629 \\
+Canada & 623 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Παρατηρείται ότι η Ινδία, οι ΗΠΑ, η Γερμανία και το Ηνωμένο Βασίλειο αποτελούν τις κυρίαρχες τοποθεσίες, αντικατοπτρίζοντας τη διεθνή σύνθεση της κοινότητας Stack Overflow.
+
+\subsubsection{Heatmap: Συναισθήματα ανά Τοποθεσία}
+\label{sec:Heatmap Συναισθήματα ανά Τοποθεσία}
+
+Το Σχήμα \ref{fig:30} παρουσιάζει heatmaps με την κατανομή των 10 συχνότερων συναισθημάτων ανά τοποθεσία για κάθε μοντέλο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{30.png}
+    \caption{Heatmaps: Κατανομή των 10 συχνότερων συναισθημάτων ανά τοποθεσία για BERT (αριστερά) και RoBERTa (δεξιά).}
+    \label{fig:30}
+\end{figure}
+
+\textbf{Κύρια ευρήματα από τη γεωγραφική ανάλυση:}
+
+\begin{itemize}
+    \item \textbf{Κυριαρχία neutral:} Σε όλες τις τοποθεσίες, το neutral είναι το συχνότερο συναίσθημα (σκούρα κελιά), υποδεικνύοντας τον τεχνικό χαρακτήρα της πλατφόρμας.
+    
+    \item \textbf{Ομοιομορφία μεταξύ τοποθεσιών:} Δεν παρατηρούνται σημαντικές διαφορές στην κατανομή συναισθημάτων μεταξύ διαφορετικών χωρών, υποδεικνύοντας ότι η γεωγραφική τοποθεσία δεν επηρεάζει σημαντικά το συναισθηματικό τόνο των σχολίων.
+    
+    \item \textbf{Curiosity και Gratitude:} Τα συναισθήματα curiosity και gratitude είναι σταθερά υψηλά σε όλες τις τοποθεσίες, αντικατοπτρίζοντας τη φύση της πλατφόρμας (ερωτήσεις και ευχαριστίες για απαντήσεις).
+    
+    \item \textbf{Συνέπεια μεταξύ μοντέλων:} Τα δύο μοντέλα παρουσιάζουν παρόμοια patterns στη γεωγραφική κατανομή συναισθημάτων, επιβεβαιώνοντας την αξιοπιστία της ανάλυσης.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ============================================================
+\subsection{Ανάλυση Ψήφων ανά Συναίσθημα}
+\label{sec:Ανάλυση Ψήφων ανά Συναίσθημα}
+
+Εξετάστηκε η σχέση μεταξύ του αναγνωρισμένου συναισθήματος και των ψήφων (upvotes/downvotes) που λαμβάνουν οι χρήστες που δημοσίευσαν τα σχόλια.
+
+\subsubsection{Upvotes ανά Συναίσθημα}
+\label{sec:Upvotes ανά Συναίσθημα}
+
+Το Σχήμα \ref{fig:31} παρουσιάζει την κατανομή των upvotes για τα 10 συχνότερα συναισθήματα, για κάθε μοντέλο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{31.png}
+    \caption{Κατανομή Upvotes ανά συναίσθημα για BERT (αριστερά) και RoBERTa (δεξιά). Τα box plots δείχνουν τη διάμεσο, τα τεταρτημόρια και τις ακραίες τιμές.}
+    \label{fig:31}
+\end{figure}
+
+\textbf{Κύρια ευρήματα (Upvotes):}
+\begin{itemize}
+    \item Το \textbf{neutral} παρουσιάζει τη μεγαλύτερη διακύμανση στα upvotes, με ακραίες τιμές που φτάνουν τα 5.000+.
+    \item Τα συναισθήματα \textbf{disapproval} και \textbf{curiosity} σχετίζονται με υψηλότερα upvotes, πιθανώς επειδή αντικατοπτρίζουν κριτική σκέψη ή ενδιαφέρουσες ερωτήσεις.
+    \item Το \textbf{gratitude} έχει χαμηλά upvotes, καθώς τα ευχαριστήρια σχόλια σπάνια λαμβάνουν ψήφους.
+\end{itemize}
+
+\subsubsection{Downvotes ανά Συναίσθημα}
+\label{sec:Downvotes ανά Συναίσθημα}
+
+Το Σχήμα \ref{fig:32} παρουσιάζει την κατανομή των downvotes για τα 10 συχνότερα συναισθήματα.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{32.png}
+    \caption{Κατανομή Downvotes ανά συναίσθημα για BERT (αριστερά) και RoBERTa (δεξιά).}
+    \label{fig:32}
+\end{figure}
+
+\textbf{Κύρια ευρήματα (Downvotes):}
+\begin{itemize}
+    \item Το \textbf{disapproval} σχετίζεται με τα υψηλότερα downvotes και στα δύο μοντέλα, υποδεικνύοντας ότι οι χρήστες που εκφράζουν αποδοκιμασία τείνουν να λαμβάνουν και οι ίδιοι αρνητικές ψήφους.
+    \item Το \textbf{neutral} παρουσιάζει επίσης υψηλή διακύμανση στα downvotes.
+    \item Τα θετικά συναισθήματα (\textbf{gratitude}, \textbf{admiration}) έχουν χαμηλά downvotes.
+\end{itemize}
+
+% ============================================================
+\subsection{Ανάλυση Συναισθημάτων ανά Ομάδα Βαθμολογίας}
+\label{sec:Ανάλυση Συναισθημάτων ανά Ομάδα Βαθμολογίας}
+
+Για την καλύτερη κατανόηση της σχέσης μεταξύ συναισθημάτων και δημοτικότητας, δημιουργήθηκαν ομάδες βαθμολογίας (score groups) τόσο για τα σχόλια όσο και για τις δημοσιεύσεις.
+
+\subsubsection{Δημιουργία Ομάδων Βαθμολογίας}
+\label{sec:Δημιουργία Ομάδων Βαθμολογίας}
+
+Ο Πίνακας \ref{tab:score_groups} παρουσιάζει την κατανομή των σχολίων και δημοσιεύσεων στις διάφορες ομάδες βαθμολογίας.
+
+\begin{table}[H]
+\centering
+\caption{Κατανομή βαθμολογιών σχολίων και δημοσιεύσεων}
+\label{tab:score_groups}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Ομάδα Βαθμολογίας} & \textbf{Comment Score} & \textbf{Post Score} \\
+\midrule
+Very Low / Negative & 97.320 & 16.237 \\
+Low & 8.889 & 30.342 \\
+Medium & 1.541 & 5.213 \\
+High & 608 & 2.020 \\
+Very High & 329 & 876 \\
+\midrule
+\textbf{Σύνολο} & 108.687 & 54.688 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Παρατηρείται ότι η πλειονότητα των σχολίων (89,5\%) έχει πολύ χαμηλή βαθμολογία (Very Low), γεγονός που αντικατοπτρίζει τη φύση της πλατφόρμας όπου τα περισσότερα σχόλια δεν λαμβάνουν ψήφους.
+
+\begin{table}[H]
+\centering
+\caption{Περιγραφικά στατιστικά βαθμολογίας σχολίων}
+\label{tab:score_stats}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Στατιστικό} & \textbf{Τιμή} \\
+\midrule
+Count & 108.687 \\
+Mean & 0 \\
+Std & 3 \\
+Min & 0 \\
+25\% & 0 \\
+50\% (Median) & 0 \\
+75\% & 0 \\
+Max & 484 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Συναισθήματα ανά Βαθμολογία Σχολίου}
+\label{sec:Συναισθήματα ανά Βαθμολογία Σχολίου}
+
+Το Σχήμα \ref{fig:33} παρουσιάζει την κατανομή των 5 συχνότερων συναισθημάτων ανά ομάδα βαθμολογίας σχολίου.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{33.png}
+    \caption{Top 5 συναισθήματα ανά ομάδα βαθμολογίας σχολίου για BERT (αριστερά) και RoBERTa (δεξιά).}
+    \label{fig:33}
+\end{figure}
+
+\textbf{Κύρια ευρήματα:}
+\begin{itemize}
+    \item Το \textbf{neutral} κυριαρχεί σε όλες τις ομάδες βαθμολογίας, ιδιαίτερα στην κατηγορία "Very Low".
+    \item Το \textbf{gratitude} είναι πιο συχνό στα σχόλια με χαμηλή βαθμολογία, καθώς τα ευχαριστήρια σχόλια σπάνια λαμβάνουν upvotes.
+    \item Στις υψηλότερες βαθμολογίες (High, Very High), παρατηρείται σχετική αύξηση των συναισθημάτων \textbf{curiosity} και \textbf{approval}.
+\end{itemize}
+
+\subsubsection{Συναισθήματα ανά Βαθμολογία Δημοσίευσης}
+\label{sec:Συναισθήματα ανά Βαθμολογία Δημοσίευσης}
+
+Το Σχήμα \ref{fig:34} παρουσιάζει την κατανομή των 5 συχνότερων συναισθημάτων ανά ομάδα βαθμολογίας της δημοσίευσης στην οποία ανήκει το σχόλιο.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{34.png}
+    \caption{Top 5 συναισθήματα ανά ομάδα βαθμολογίας δημοσίευσης για BERT (αριστερά) και RoBERTa (δεξιά).}
+    \label{fig:34}
+\end{figure}
+
+\textbf{Κύρια ευρήματα:}
+\begin{itemize}
+    \item Η κατηγορία "Low" (χαμηλή βαθμολογία δημοσίευσης) περιέχει τα περισσότερα σχόλια, με κυριαρχία του \textbf{neutral}.
+    
+    \item Σε δημοσιεύσεις με \textbf{αρνητική βαθμολογία} (Negative), παρατηρείται υψηλότερο ποσοστό \textbf{curiosity} και \textbf{confusion}, πιθανώς επειδή οι χρήστες ζητούν διευκρινίσεις.
+    
+    \item Το \textbf{gratitude} είναι πιο συχνό σε δημοσιεύσεις με θετική βαθμολογία, υποδεικνύοντας ότι οι χρήστες ευχαριστούν για χρήσιμες απαντήσεις.
+    
+    \item Τα patterns είναι παρόμοια μεταξύ BERT και RoBERTa, επιβεβαιώνοντας τη συνέπεια της ανάλυσης.
+\end{itemize}
+
+\newpage
+
+
+
+% ============================================================
+\subsection{Συγκεντρωτικά Αποτελέσματα Σύγκρισης Μοντέλων}
+\label{sec:Συγκεντρωτικά Αποτελέσματα Σύγκρισης Μοντέλων}
+
+Η παρούσα υποενότητα συνοψίζει τα τελικά αποτελέσματα της συγκριτικής ανάλυσης μεταξύ των μοντέλων BERT και RoBERTa.
+
+\subsubsection{Τελικός Πίνακας Σύγκρισης Μοντέλων}
+\label{sec:Τελικός Πίνακας Σύγκρισης Μοντέλων}
+
+Ο Πίνακας \ref{tab:final_comparison} παρουσιάζει τη συνολική σύγκριση των δύο μοντέλων σε όλες τις βασικές μετρικές.
+
+\begin{table}[H]
+\centering
+\caption{Τελική σύγκριση μοντέλων BERT και RoBERTa}
+\label{tab:final_comparison}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Μετρική} & \textbf{RoBERTa} & \textbf{BERT} \\
+\midrule
+Total Comments Analyzed & 108.687 & 108.687 \\
+Emotion Agreement Rate & 78,4\% & 78,4\% \\
+Sentiment Agreement Rate & 90,4\% & 90,4\% \\
+Average Confidence & 75,3\% & 93,8\% \\
+Confidence Std Dev & 0,1818 & 0,1284 \\
+Most Common Emotion & neutral & neutral \\
+Most Common Sentiment & neutral & neutral \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Συμπεράσματα από τη σύγκριση:}
+
+\begin{enumerate}
+    \item \textbf{Υψηλή συμφωνία sentiment:} Και τα δύο μοντέλα παρουσιάζουν υψηλή συμφωνία σε επίπεδο sentiment (90,4\%), υποδεικνύοντας ότι είναι αξιόπιστα για γενική ταξινόμηση συναισθήματος.
+    
+    \item \textbf{Διαφορά στο confidence:} Το BERT παρουσιάζει υψηλότερα confidence scores (93,8\% vs 75,3\%), αλλά αυτό μπορεί να υποδεικνύει υπερβολική εμπιστοσύνη (overconfidence) παρά καλύτερη απόδοση.
+    
+    \item \textbf{Καλύτερη βαθμονόμηση RoBERTa:} Η μεγαλύτερη διασπορά των confidence scores του RoBERTa (std = 0,1818) υποδεικνύει καλύτερη βαθμονόμηση, δηλαδή το confidence αντικατοπτρίζει καλύτερα την πραγματική βεβαιότητα.
+    
+    \item \textbf{Επιλογή μοντέλου:} Η επιλογή μεταξύ των μοντέλων εξαρτάται από τις ανάγκες της εφαρμογής — υψηλότερο confidence (BERT) ή καλύτερη βαθμονόμηση (RoBERTa).
+\end{enumerate}
+
+% ============================================================
+\subsubsection{Insights Ανάλυσης Συναισθημάτων}
+\label{sec:Insights Ανάλυσης Συναισθημάτων}
+
+Η ανάλυση αποκάλυψε ενδιαφέροντα patterns σχετικά με τη σχέση συναισθημάτων και δραστηριότητας χρηστών.
+
+\paragraph{Συναισθήματα με Υψηλότερα Upvotes}
+
+Ο Πίνακας \ref{tab:emotions_upvotes} παρουσιάζει τα συναισθήματα που σχετίζονται με τα υψηλότερα μέσα upvotes χρηστών.
+
+\begin{table}[H]
+\centering
+\caption{Συναισθήματα με υψηλότερα μέσα upvotes ανά μοντέλο}
+\label{tab:emotions_upvotes}
+\begin{tabular}{@{}lrlr@{}}
+\toprule
+\multicolumn{2}{c}{\textbf{BERT}} & \multicolumn{2}{c}{\textbf{RoBERTa}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+\textbf{Emotion} & \textbf{Avg Upvotes} & \textbf{Emotion} & \textbf{Avg Upvotes} \\
+\midrule
+relief & 3.100,3 & love & 2.370,5 \\
+excitement & 2.886,7 & fear & 2.238,5 \\
+fear & 2.199,6 & embarrassment & 2.210,8 \\
+love & 2.135,7 & neutral & 2.018,6 \\
+caring & 2.133,1 & caring & 2.013,4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Συναισθήματα με Υψηλότερα Downvotes}
+
+Ο Πίνακας \ref{tab:emotions_downvotes} παρουσιάζει τα συναισθήματα που σχετίζονται με τα υψηλότερα μέσα downvotes χρηστών.
+
+\begin{table}[H]
+\centering
+\caption{Συναισθήματα με υψηλότερα μέσα downvotes ανά μοντέλο}
+\label{tab:emotions_downvotes}
+\begin{tabular}{@{}lrlr@{}}
+\toprule
+\multicolumn{2}{c}{\textbf{BERT}} & \multicolumn{2}{c}{\textbf{RoBERTa}} \\
+\cmidrule(r){1-2} \cmidrule(l){3-4}
+\textbf{Emotion} & \textbf{Avg Downvotes} & \textbf{Emotion} & \textbf{Avg Downvotes} \\
+\midrule
+relief & 3.982,1 & embarrassment & 2.758,2 \\
+anger & 2.934,1 & disapproval & 2.651,3 \\
+disapproval & 2.913,6 & fear & 2.298,9 \\
+caring & 2.636,3 & joy & 2.196,6 \\
+annoyance & 2.566,9 & amusement & 2.159,1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Κυρίαρχο Συναίσθημα ανά Τοποθεσία}
+
+Ο Πίνακας \ref{tab:emotion_location} παρουσιάζει το συχνότερο συναίσθημα ανά γεωγραφική τοποθεσία.
+
+\begin{table}[H]
+\centering
+\caption{Κυρίαρχο συναίσθημα ανά τοποθεσία}
+\label{tab:emotion_location}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Τοποθεσία} & \textbf{BERT} & \textbf{RoBERTa} \\
+\midrule
+India & neutral & neutral \\
+United States & neutral & neutral \\
+Germany & neutral & neutral \\
+London, United Kingdom & neutral & neutral \\
+United Kingdom & neutral & neutral \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Κύρια ευρήματα από τα insights:}
+
+\begin{itemize}
+    \item \textbf{Υψηλά upvotes σε έντονα συναισθήματα:} Τα συναισθήματα relief, excitement, love και fear σχετίζονται με χρήστες που έχουν υψηλά upvotes, υποδεικνύοντας ότι η συναισθηματική έκφραση μπορεί να συνδέεται με την αναγνώριση από την κοινότητα.
+    
+    \item \textbf{Αρνητικά συναισθήματα και downvotes:} Τα συναισθήματα anger, disapproval και annoyance σχετίζονται με υψηλότερα downvotes, υποδεικνύοντας ότι η αρνητική έκφραση μπορεί να οδηγεί σε αρνητική ανταπόκριση από την κοινότητα.
+    
+    \item \textbf{Ομοιομορφία μεταξύ τοποθεσιών:} Το neutral είναι το κυρίαρχο συναίσθημα σε όλες τις τοποθεσίες και για τα δύο μοντέλα, επιβεβαιώνοντας τον τεχνικό και ουδέτερο χαρακτήρα της πλατφόρμας Stack Overflow ανεξαρτήτως γεωγραφικής περιοχής.
+    
+    \item \textbf{Διαφορές μεταξύ μοντέλων:} Παρατηρούνται κάποιες διαφορές στα patterns upvotes/downvotes μεταξύ των μοντέλων, αλλά τα γενικά συμπεράσματα παραμένουν σταθερά.
+\end{itemize}
+
+
+
+
+
+\newpage
+
+% ============================================================
+% ΕΝΟΤΗΤΑ 7: ΣΥΜΠΕΡΑΣΜΑΤΑ
+% ============================================================
+\section{Συμπεράσματα}
+\label{sec:Συμπεράσματα}
+
+Η παρούσα ενότητα συνοψίζει τα κύρια συμπεράσματα της έρευνας, απαντά στα ερευνητικά ερωτήματα που τέθηκαν και παρουσιάζει τη συνεισφορά της εργασίας στο επιστημονικό πεδίο.
+
+% ============================================================
+\subsection{Κύρια Συμπεράσματα}
+\label{sec:Κύρια Συμπεράσματα}
+
+Η συγκριτική ανάλυση των μοντέλων BERT και RoBERTa σε 108.687 σχόλια του Stack Overflow οδήγησε στα ακόλουθα κύρια συμπεράσματα:
+
+\begin{enumerate}
+    \item \textbf{Αποτελεσματικότητα μοντέλων Transformer:} Τα προεκπαιδευμένα μοντέλα BERT και RoBERTa, λεπτο-ρυθμισμένα στο GoEmotions dataset, αποδείχθηκαν αποτελεσματικά στην ανάλυση συναισθήματος τεχνικών κειμένων, παρά το γεγονός ότι εκπαιδεύτηκαν σε δεδομένα κοινωνικών δικτύων (Reddit).
+    
+    \item \textbf{Υψηλή συμφωνία μεταξύ μοντέλων:} Τα δύο μοντέλα παρουσιάζουν ουσιαστική συμφωνία (Cohen's Kappa = 0,669) με ποσοστό συμφωνίας 78,4\% σε επίπεδο συναισθήματος και 90,4\% σε επίπεδο sentiment, υποδεικνύοντας αξιοπιστία στην ταξινόμηση.
+    
+    \item \textbf{Διαφορετικά χαρακτηριστικά βαθμονόμησης:} Το BERT παρουσιάζει υπερβολική εμπιστοσύνη (overconfidence) με μέσο confidence score 93,8\%, ενώ το RoBERTa εμφανίζει καλύτερη βαθμονόμηση με 75,3\%, καθιστώντας τις εκτιμήσεις του πιο ρεαλιστικές.
+    
+    \item \textbf{Χαρακτηριστικά τεχνικών κοινοτήτων:} Η ανάλυση αποκάλυψε ότι το 74\% των σχολίων του Stack Overflow είναι συναισθηματικά ουδέτερα, με το 20\% να εκφράζει θετικά συναισθήματα (κυρίως ευγνωμοσύνη) και μόλις 6\% αρνητικά.
+    
+    \item \textbf{Στατιστικά σημαντικές διαφορές:} Ο έλεγχος McNemar επιβεβαίωσε ότι τα μοντέλα παρουσιάζουν στατιστικά σημαντική διαφορά στη συμπεριφορά τους (p < 0,0001), με το BERT να είναι πιο "σίγουρο" σε αναλογία 6:1 σε σχέση με το RoBERTa.
+    
+    \item \textbf{Ανεξαρτησία από γεωγραφική τοποθεσία:} Η κατανομή συναισθημάτων παραμένει σταθερή ανεξαρτήτως της γεωγραφικής τοποθεσίας των χρηστών, υποδεικνύοντας ομοιογένεια στην τεχνική κοινότητα.
+\end{enumerate}
+
+% ============================================================
+\subsection{Απάντηση στα Ερευνητικά Ερωτήματα}
+\label{sec:Απάντηση στα Ερευνητικά Ερωτήματα}
+
+Ο Πίνακας \ref{tab:research_questions_answers} παρουσιάζει τις απαντήσεις στα ερευνητικά ερωτήματα που τέθηκαν στην αρχή της εργασίας.
+
+\begin{table}[H]
+\centering
+\caption{Απαντήσεις στα ερευνητικά ερωτήματα}
+\label{tab:research_questions_answers}
+\small
+\begin{tabular}{@{}p{5.5cm}p{8.5cm}@{}}
+\toprule
+\textbf{Ερευνητικό Ερώτημα} & \textbf{Απάντηση} \\
+\midrule
+\textbf{ΕΕ1:} Σε ποιο βαθμό συμφωνούν τα μοντέλα BERT και RoBERTa στην ανάλυση συναισθήματος; & 
+Τα μοντέλα συμφωνούν στο 78,4\% σε επίπεδο ακριβούς συναισθήματος και στο 90,4\% σε επίπεδο sentiment, με Cohen's Kappa = 0,669 (ουσιαστική συμφωνία). \\
+\midrule
+\textbf{ΕΕ2:} Ποιες είναι οι διαφορές στη βαθμονόμηση (calibration) μεταξύ των δύο μοντέλων; & 
+Το BERT παρουσιάζει υπερβολική εμπιστοσύνη (μέσο confidence 93,8\%, διάμεσος 99,9\%), ενώ το RoBERTa έχει καλύτερη βαθμονόμηση (μέσο confidence 75,3\%) με πιο ρεαλιστική διασπορά τιμών. \\
+\midrule
+\textbf{ΕΕ3:} Ποια είναι τα κυρίαρχα συναισθήματα στην τεχνική κοινότητα του Stack Overflow; & 
+Neutral (74\%), Gratitude (12\%), Curiosity (10\%), Confusion (7\%), Approval (5\%). Η κοινότητα χαρακτηρίζεται από ουδέτερο τόνο με σημαντική παρουσία θετικών συναισθημάτων. \\
+\midrule
+\textbf{ΕΕ4:} Υπάρχει συσχέτιση μεταξύ συναισθήματος και δημοτικότητας σχολίων; & 
+Η συσχέτιση μεταξύ confidence scores και βαθμολογίας σχολίων είναι αμελητέα ($r \approx 0$), υποδεικνύοντας ότι η δημοτικότητα εξαρτάται από το περιεχόμενο και όχι από τη σαφήνεια του συναισθήματος. \\
+\midrule
+\textbf{ΕΕ5:} Σε ποια συναισθήματα παρατηρούνται οι περισσότερες διαφωνίες μεταξύ των μοντέλων; & 
+Οι κύριες διαφωνίες εντοπίζονται στα: neutral (35,4\%), curiosity (19,7\%), confusion (12,9\%) και approval (11\%), δηλαδή σε σημασιολογικά κοντινά συναισθήματα. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Συνεισφορά της Εργασίας}
+\label{sec:Συνεισφορά της Εργασίας}
+
+Η παρούσα πτυχιακή εργασία συνεισφέρει στο επιστημονικό πεδίο της ανάλυσης συναισθήματος στους ακόλουθους τομείς:
+
+\subsubsection{Θεωρητική Συνεισφορά}
+
+\begin{itemize}
+    \item \textbf{Συγκριτική ανάλυση μοντέλων:} Παρέχεται εκτενής συγκριτική αξιολόγηση των μοντέλων BERT και RoBERTa, εξετάζοντας την ακρίβεια ταξινόμησης, τη βαθμονόμηση και τη συμφωνία.
+    
+    \item \textbf{Στατιστική επικύρωση:} Εφαρμόστηκαν αυστηροί στατιστικοί έλεγχοι (Cohen's Kappa, McNemar, Pearson, t-test) για την τεκμηρίωση των ευρημάτων.
+    
+    \item \textbf{Χαρακτηρισμός τεχνικών κοινοτήτων:} Συνεισφέρει στην κατανόηση του συναισθηματικού τόνου σε τεχνικές διαδικτυακές κοινότητες.
+\end{itemize}
+
+\subsubsection{Πρακτική Συνεισφορά}
+
+\begin{itemize}
+    \item \textbf{Ανάλυση πραγματικών δεδομένων:} Βασίζεται σε 108.687 σχόλια από το Stack Overflow, προσφέροντας insights για τη συναισθηματική δυναμική τεχνικών κοινοτήτων.
+    
+    \item \textbf{Πολυδιάστατη ανάλυση:} Διερευνήθηκε η σχέση μεταξύ συναισθημάτων και μετρικών αλληλεπίδρασης (upvotes, downvotes, reputation) καθώς και γεωγραφικών παραγόντων.
+    
+    \item \textbf{Αναπαραγώγιμη μεθοδολογία:} Παρέχεται πλήρης τεκμηρίωση της μεθοδολογίας και του κώδικα Python.
+\end{itemize}
+
+\subsubsection{Στατιστική Συνεισφορά}
+
+\begin{itemize}
+    \item \textbf{Πολυδιάστατη στατιστική ανάλυση:} Εφαρμόζει πολλαπλούς στατιστικούς ελέγχους (Cohen's Kappa, McNemar, Pearson, t-test) για την ολοκληρωμένη αξιολόγηση.
+    
+    \item \textbf{Μεγάλο δείγμα:} Η ανάλυση βασίζεται σε 108.687 σχόλια, παρέχοντας στατιστικά ισχυρά συμπεράσματα.
+\end{itemize}
+
+% ============================================================
+\subsection{Προτάσεις για Πρακτική Εφαρμογή}
+\label{sec:Προτάσεις για Πρακτική Εφαρμογή}
+
+Βάσει των ευρημάτων της έρευνας, προτείνονται οι ακόλουθες οδηγίες για πρακτική εφαρμογή:
+
+\begin{table}[H]
+\centering
+\caption{Προτάσεις επιλογής μοντέλου ανά περίπτωση χρήσης}
+\label{tab:model_recommendations}
+\begin{tabular}{@{}p{4cm}p{4cm}p{5.5cm}@{}}
+\toprule
+\textbf{Περίπτωση Χρήσης} & \textbf{Προτεινόμενο Μοντέλο} & \textbf{Αιτιολόγηση} \\
+\midrule
+Γενική ταξινόμηση sentiment & BERT ή RoBERTa & Υψηλή συμφωνία (90,4\%) καθιστά και τα δύο κατάλληλα \\
+\midrule
+Εφαρμογές με ανάγκη για αξιόπιστες εκτιμήσεις βεβαιότητας & RoBERTa & Καλύτερη βαθμονόμηση confidence scores \\
+\midrule
+Εφαρμογές με ανάγκη για υψηλή βεβαιότητα & BERT & Υψηλότερα confidence scores (με επιφύλαξη για overconfidence) \\
+\midrule
+Λεπτομερής ανάλυση συναισθημάτων & Συνδυασμός και των δύο & Οι διαφωνίες μπορούν να αποκαλύψουν αμφίσημα κείμενα \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Περιορισμοί της Έρευνας}
+\label{sec:Περιορισμοί της Έρευνας}
+
+Η παρούσα έρευνα υπόκειται στους ακόλουθους περιορισμούς:
+
+\begin{enumerate}
+    \item \textbf{Απουσία ground truth:} Δεν υπάρχουν χειροκίνητα επισημασμένα δεδομένα για τα σχόλια του Stack Overflow, καθιστώντας αδύνατη την αξιολόγηση της απόλυτης ακρίβειας των μοντέλων.
+    
+    \item \textbf{Domain mismatch:} Τα μοντέλα εκπαιδεύτηκαν στο GoEmotions (Reddit), το οποίο διαφέρει από το τεχνικό ύφος του Stack Overflow.
+    
+    \item \textbf{Γλωσσικός περιορισμός:} Η ανάλυση περιορίστηκε στην αγγλική γλώσσα.
+    
+    \item \textbf{Τυχαία δειγματοληψία:} Η δειγματοληψία 5\% μπορεί να μην είναι πλήρως αντιπροσωπευτική.
+    
+    \item \textbf{Χρονική στιγμή:} Τα δεδομένα αντιπροσωπεύουν μια χρονική στιγμή και δεν καλύπτουν χρονικές τάσεις.
+\end{enumerate}
+
+% ============================================================
+\subsection{Τελική Σύνοψη}
+\label{sec:Τελική Σύνοψη}
+
+Η παρούσα πτυχιακή εργασία πραγματοποίησε μια ολοκληρωμένη συγκριτική ανάλυση των μοντέλων BERT και RoBERTa για την ανάλυση συναισθήματος σε τεχνικές διαδικτυακές κοινότητες. Τα αποτελέσματα επιβεβαιώνουν την αποτελεσματικότητα των μοντέλων Transformer, αναδεικνύουν τη σημασία της βαθμονόμησης στην αξιολόγηση μοντέλων, και παρέχουν πρακτικές κατευθύνσεις για την επιλογή μοντέλου ανάλογα με τις απαιτήσεις της εφαρμογής.
+
+Η υψηλή συμφωνία μεταξύ των μοντέλων (90,4\% σε επίπεδο sentiment) υποδεικνύει ότι και τα δύο αποτελούν αξιόπιστες επιλογές για ανάλυση συναισθήματος, με το RoBERTa να προσφέρει καλύτερη βαθμονόμηση και το BERT υψηλότερα confidence scores. Η έρευνα συνεισφέρει τόσο θεωρητικά όσο και πρακτικά στο πεδίο της ανάλυσης συναισθήματος, παρέχοντας ένα ολοκληρωμένο μεθοδολογικό πλαίσιο για μελλοντικές εργασίες.
+
+
+\\
+
+
+
+
+
+
+
+
+% ============================================================
+% ΕΝΟΤΗΤΑ 8: ΠΡΟΤΑΣΕΙΣ ΓΙΑ ΜΕΛΛΟΝΤΙΚΕΣ ΒΕΛΤΙΩΣΕΙΣ
+% ============================================================
+\section{Προτάσεις για Μελλοντικές Βελτιώσεις}
+\label{sec:Προτάσεις για Μελλοντικές Βελτιώσεις}
+
+Η παρούσα ενότητα παρουσιάζει προτάσεις για μελλοντική έρευνα και βελτιώσεις, βασισμένες στα ευρήματα και τους περιορισμούς της παρούσας εργασίας.
+
+% ============================================================
+\subsection{Εμπλουτισμός Δεδομένων}
+\label{sec:Εμπλουτισμός Δεδομένων}
+
+\subsubsection{Δημιουργία Ground Truth Dataset}
+
+Η σημαντικότερη μελλοντική βελτίωση αφορά τη δημιουργία ενός χειροκίνητα επισημασμένου dataset:
+
+\begin{itemize}
+    \item \textbf{Manual annotation:} Επισήμανση τουλάχιστον 5.000-10.000 σχολίων από ανθρώπους αξιολογητές για τη δημιουργία gold standard.
+    
+    \item \textbf{Inter-annotator agreement:} Χρήση πολλαπλών αξιολογητών (≥3) για τον υπολογισμό της συμφωνίας μεταξύ τους και τη διασφάλιση της ποιότητας.
+    
+    \item \textbf{Domain-specific guidelines:} Ανάπτυξη οδηγιών επισήμανσης ειδικά για τεχνικά κείμενα, λαμβάνοντας υπόψη τις ιδιαιτερότητες του Stack Overflow.
+\end{itemize}
+
+\subsubsection{Επέκταση σε Πολλαπλές Πλατφόρμες}
+
+\begin{itemize}
+    \item \textbf{Άλλες τεχνικές κοινότητες:} Επέκταση της ανάλυσης σε GitHub Issues, GitLab, Reddit (r/programming, r/learnprogramming).
+    
+    \item \textbf{Συγκριτική ανάλυση πλατφορμών:} Σύγκριση του συναισθηματικού τόνου μεταξύ διαφορετικών τεχνικών κοινοτήτων.
+    
+    \item \textbf{Διαχρονική ανάλυση:} Εξέταση της εξέλιξης των συναισθημάτων στο Stack Overflow από την ίδρυσή του έως σήμερα.
+\end{itemize}
+
+\subsubsection{Πολυγλωσσική Ανάλυση}
+
+\begin{itemize}
+    \item \textbf{Multilingual models:} Χρήση πολυγλωσσικών μοντέλων (mBERT, XLM-RoBERTa) για ανάλυση σε μη αγγλόφωνες κοινότητες.
+    
+    \item \textbf{Τοπικές εκδόσεις Stack Overflow:} Ανάλυση των ισπανικών, πορτογαλικών, ρωσικών και ιαπωνικών εκδόσεων της πλατφόρμας.
+    
+    \item \textbf{Cross-lingual transfer:} Διερεύνηση της μεταφοράς γνώσης μεταξύ γλωσσών για ανάλυση συναισθήματος.
+\end{itemize}
+
+% ============================================================
+\subsection{Ποιοτική Ανάλυση και Επαλήθευση}
+\label{sec:Ποιοτική Ανάλυση και Επαλήθευση}
+
+\subsubsection{Σύγκριση με Baseline Μοντέλα}
+
+\begin{itemize}
+    \item \textbf{Λεξικά-based μέθοδοι:} Σύγκριση με παραδοσιακές μεθόδους όπως VADER, TextBlob, AFINN.
+    
+    \item \textbf{Machine Learning baselines:} Αξιολόγηση με SVM, Random Forest, Logistic Regression χρησιμοποιώντας TF-IDF features.
+    
+    \item \textbf{Προηγούμενα deep learning μοντέλα:} Σύγκριση με LSTM, BiLSTM, CNN για κείμενο.
+\end{itemize}
+
+\subsubsection{Ποιοτική Έρευνα}
+
+\begin{itemize}
+    \item \textbf{Ανάλυση λαθών (Error analysis):} Συστηματική εξέταση των περιπτώσεων διαφωνίας για την κατανόηση των αδυναμιών των μοντέλων.
+    
+    \item \textbf{Συνεντεύξεις με χρήστες:} Διεξαγωγή συνεντεύξεων με χρήστες του Stack Overflow για επαλήθευση των ευρημάτων.
+    
+    \item \textbf{Case studies:} Λεπτομερής ανάλυση συγκεκριμένων threads για την κατανόηση της δυναμικής των συναισθημάτων σε τεχνικές συζητήσεις.
+\end{itemize}
+
+\subsubsection{Cross-Validation και Robustness}
+
+\begin{itemize}
+    \item \textbf{K-fold cross-validation:} Εφαρμογή cross-validation για την αξιολόγηση της σταθερότητας των αποτελεσμάτων.
+    
+    \item \textbf{Bootstrap confidence intervals:} Υπολογισμός διαστημάτων εμπιστοσύνης για τις μετρικές αξιολόγησης.
+    
+    \item \textbf{Sensitivity analysis:} Εξέταση της ευαισθησίας των αποτελεσμάτων σε διαφορετικές παραμέτρους.
+\end{itemize}
+
+% ============================================================
+\subsection{Προηγμένες Τεχνικές Ανάλυσης}
+\label{sec:Προηγμένες Τεχνικές Ανάλυσης}
+
+\subsubsection{Νεότερα Μοντέλα Transformer}
+
+\begin{itemize}
+    \item \textbf{DeBERTa:} Χρήση του DeBERTa (Decoding-enhanced BERT) που έχει δείξει βελτιωμένη απόδοση σε NLU tasks.
+    
+    \item \textbf{ELECTRA:} Εξέταση του ELECTRA για πιο αποδοτική προεκπαίδευση.
+    
+    \item \textbf{Large Language Models (LLMs):} Αξιολόγηση μοντέλων όπως GPT-4, Claude, LLaMA για zero-shot και few-shot sentiment analysis.
+\end{itemize}
+
+\subsubsection{Fine-tuning σε Domain-Specific Δεδομένα}
+
+\begin{itemize}
+    \item \textbf{Domain adaptation:} Fine-tuning των μοντέλων σε τεχνικά κείμενα (documentation, code comments, technical forums).
+    
+    \item \textbf{Continued pre-training:} Συνέχιση της προεκπαίδευσης σε μεγάλο corpus τεχνικών κειμένων πριν το fine-tuning.
+    
+    \item \textbf{Custom emotion taxonomy:} Ανάπτυξη ειδικής ταξινομίας συναισθημάτων για τεχνικές κοινότητες.
+\end{itemize}
+
+\subsubsection{Ensemble και Hybrid Μέθοδοι}
+
+\begin{itemize}
+    \item \textbf{Model ensembling:} Συνδυασμός πολλαπλών μοντέλων (BERT, RoBERTa, DeBERTa) με voting ή stacking.
+    
+    \item \textbf{Hybrid approaches:} Συνδυασμός Transformer με λεξικά-based μεθόδους για βελτιωμένη ερμηνευσιμότητα.
+    
+    \item \textbf{Multi-task learning:} Ταυτόχρονη εκπαίδευση για πολλαπλές εργασίες (sentiment, emotion, sarcasm detection).
+\end{itemize}
+
+\subsubsection{Aspect-Based Sentiment Analysis}
+
+\begin{itemize}
+    \item \textbf{Αναγνώριση aspects:} Εντοπισμός συγκεκριμένων πτυχών (code quality, documentation, response time) στα σχόλια.
+    
+    \item \textbf{Sentiment per aspect:} Ανάλυση συναισθήματος για κάθε aspect ξεχωριστά.
+    
+    \item \textbf{Opinion mining:} Εξαγωγή δομημένων απόψεων από τα σχόλια.
+\end{itemize}
+
+% ============================================================
+\subsection{Τεχνολογικές Επεκτάσεις}
+\label{sec:Τεχνολογικές Επεκτάσεις}
+
+\subsubsection{Χρονική Ανάλυση (Temporal Analysis)}
+
+\begin{itemize}
+    \item \textbf{Trend analysis:} Παρακολούθηση της εξέλιξης των συναισθημάτων στο χρόνο.
+    
+    \item \textbf{Event detection:} Αναγνώριση γεγονότων που επηρεάζουν το συναισθηματικό κλίμα (releases, security breaches).
+    
+    \item \textbf{Seasonal patterns:} Εξέταση εποχιακών μοτίβων στην έκφραση συναισθημάτων.
+\end{itemize}
+
+\subsubsection{Ερμηνευσιμότητα (Explainability)}
+
+\begin{itemize}
+    \item \textbf{SHAP values:} Χρήση SHAP για την εξήγηση των προβλέψεων σε επίπεδο token.
+    
+    \item \textbf{LIME:} Εφαρμογή LIME για τοπικές ερμηνείες των προβλέψεων.
+    
+    \item \textbf{Attention visualization:} Οπτικοποίηση των attention weights για την κατανόηση της εστίασης του μοντέλου.
+\end{itemize}
+
+\subsubsection{Ανίχνευση Ειρωνείας και Σαρκασμού}
+
+\begin{itemize}
+    \item \textbf{Sarcasm detection:} Ανάπτυξη ειδικού module για την ανίχνευση σαρκασμού, που είναι συχνός στις τεχνικές κοινότητες.
+    
+    \item \textbf{Context-aware analysis:} Χρήση του context της συζήτησης για καλύτερη κατανόηση της πρόθεσης.
+    
+    \item \textbf{Multi-modal signals:} Ενσωμάτωση σημάτων όπως formatting, code blocks, και links.
+\end{itemize}
+
+\subsubsection{Real-Time Ανάλυση}
+
+\begin{itemize}
+    \item \textbf{Streaming pipeline:} Ανάπτυξη pipeline για ανάλυση σε πραγματικό χρόνο.
+    
+    \item \textbf{Dashboard:} Δημιουργία διαδραστικού dashboard για την παρακολούθηση του συναισθηματικού κλίματος.
+    
+    \item \textbf{Alert system:} Σύστημα ειδοποιήσεων για ανίχνευση αρνητικών τάσεων ή toxic behavior.
+\end{itemize}
+
+% ============================================================
+\subsection{Εφαρμογές και Αξιοποίηση}
+\label{sec:Εφαρμογές και Αξιοποίηση}
+
+\begin{itemize}
+    \item \textbf{Community health monitoring:} Εργαλείο για τους moderators του Stack Overflow για την παρακολούθηση της υγείας της κοινότητας.
+    
+    \item \textbf{Automated content moderation:} Αυτόματη ανίχνευση toxic ή unwelcoming σχολίων.
+    
+    \item \textbf{User feedback analysis:} Ανάλυση feedback για βελτίωση της πλατφόρμας.
+    
+    \item \textbf{Developer well-being:} Εργαλεία για την παρακολούθηση της ψυχικής υγείας των developers μέσω της ανάλυσης της επικοινωνίας τους.
+\end{itemize}
+
+% ============================================================
+\subsection{Σύνοψη Μελλοντικών Κατευθύνσεων}
+\label{sec:Σύνοψη Μελλοντικών Κατευθύνσεων}
+
+Ο Πίνακας \ref{tab:future_work_summary} συνοψίζει τις προτεινόμενες μελλοντικές κατευθύνσεις ανά προτεραιότητα.
+
+\begin{table}[H]
+\centering
+\caption{Σύνοψη προτάσεων για μελλοντική έρευνα ανά προτεραιότητα}
+\label{tab:future_work_summary}
+\small
+\begin{tabular}{@{}p{2cm}p{4.5cm}p{3.5cm}p{3.5cm}@{}}
+\toprule
+\textbf{Προτεραιότητα} & \textbf{Πρόταση} & \textbf{Αναμενόμενο Όφελος} & \textbf{Απαιτούμενοι Πόροι} \\
+\midrule
+\textbf{Υψηλή} & Δημιουργία ground truth dataset & Αξιολόγηση απόλυτης ακρίβειας & Ανθρώπινοι αξιολογητές \\
+\midrule
+\textbf{Υψηλή} & Fine-tuning σε τεχνικά κείμενα & Βελτιωμένη domain accuracy & GPU resources \\
+\midrule
+\textbf{Μέτρια} & Νεότερα μοντέλα (DeBERTa, LLMs) & Βελτιωμένη απόδοση & Υπολογιστικοί πόροι \\
+\midrule
+\textbf{Μέτρια} & Aspect-based analysis & Λεπτομερέστερα insights & Ερευνητικός χρόνος \\
+\midrule
+\textbf{Χαμηλή} & Πολυγλωσσική ανάλυση & Ευρύτερη εφαρμογή & Πολυγλωσσικά δεδομένα \\
+\midrule
+\textbf{Χαμηλή} & Real-time dashboard & Πρακτική αξιοποίηση & Ανάπτυξη εφαρμογής \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Επίλογος}
+\label{sec:Επίλογος}
+
+Η παρούσα πτυχιακή εργασία αποτελεί μια ολοκληρωμένη συγκριτική μελέτη των μοντέλων BERT και RoBERTa για την ανάλυση συναισθήματος σε τεχνικές διαδικτυακές κοινότητες. Μέσω της ανάλυσης 108.687 σχολίων του Stack Overflow, η εργασία κατέδειξε την αποτελεσματικότητα των μοντέλων Transformer στην αναγνώριση συναισθημάτων, αναδεικνύοντας παράλληλα τη σημασία της βαθμονόμησης (calibration) ως κριτήριο αξιολόγησης.
+
+Τα ευρήματα της έρευνας έχουν τόσο θεωρητική όσο και πρακτική σημασία. Από θεωρητική άποψη, η εργασία συνεισφέρει στην κατανόηση της συμπεριφοράς των μοντέλων Transformer σε τεχνικά κείμενα και αναδεικνύει τις διαφορές στη βαθμονόμηση μεταξύ BERT και RoBERTa. Από πρακτική άποψη, παρέχει κατευθυντήριες γραμμές για την επιλογή μοντέλου ανάλογα με τις απαιτήσεις της εκάστοτε εφαρμογής.
+
+Η ανάλυση συναισθήματος σε τεχνικές κοινότητες αποτελεί ένα αναδυόμενο ερευνητικό πεδίο με σημαντικές προοπτικές. Καθώς οι διαδικτυακές κοινότητες developers συνεχίζουν να αναπτύσσονται, η κατανόηση του συναισθηματικού τόνου της επικοινωνίας μπορεί να συμβάλει στη βελτίωση της ποιότητας της αλληλεπίδρασης, στην ανίχνευση προβληματικών συμπεριφορών, και στη δημιουργία πιο φιλόξενων περιβαλλόντων για νέους και έμπειρους προγραμματιστές.
+
+Η παρούσα εργασία θέτει τα θεμέλια για μελλοντική έρευνα στον τομέα, προτείνοντας συγκεκριμένες κατευθύνσεις για την επέκταση και βελτίωση της ανάλυσης. Η δημιουργία ground truth datasets, η εφαρμογή νεότερων μοντέλων, και η ανάπτυξη πρακτικών εφαρμογών αποτελούν τα επόμενα βήματα για την πλήρη αξιοποίηση του δυναμικού της ανάλυσης συναισθήματος στις τεχνικές κοινότητες.
+
+\begin{center}
+\rule{0.5\textwidth}{0.4pt}
+\end{center}
+
+\begin{quote}
+\textit{"The emotional tone of technical communities reflects not just the challenges developers face, but also the supportive nature of collaborative problem-solving."}
+\end{quote}
+
+
+\newpage
+% ============================================================
+% ΕΝΟΤΗΤΑ 9: Βιβλιογραφία
+% ============================================================
+
+\section{Βιβλιογραφία}
+\label{sec:Βιβλιογραφία}
+\printbibliography[heading=none]
+
+
+
+
+
+
+\newpage
+
+
+
+\end{document}
