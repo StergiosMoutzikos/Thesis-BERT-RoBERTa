@@ -1,0 +1,13 @@
+pandas
+numpy
+seaborn
+matplotlib
+nltk
+emoji
+transformers
+torch
+scipy
+statsmodels
+scikit-learn
+tqdm
+ipywidgets
